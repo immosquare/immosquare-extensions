@@ -21,8 +21,8 @@ class Hash
   end
 
   ##============================================================##
-  ## Convert all keys of the hash to lowercase. 
-  ## If a value is an array, it recursively processes the 
+  ## Convert all keys of the hash to lowercase.
+  ## If a value is an array, it recursively processes the
   ## nested hash elements.
   ##
   ## Example:
@@ -46,7 +46,7 @@ class Hash
   end
 
   ##============================================================##
-  ## Sort a hash by its keys. If the recursive flag is true, 
+  ## Sort a hash by its keys. If the recursive flag is true,
   ## it will sort nested hashes as well.
   ##
   ## Reference:
@@ -63,7 +63,7 @@ class Hash
   end
 
   ##============================================================##
-  ## Flatten a nested hash into a single-level hash. Nested keys 
+  ## Flatten a nested hash into a single-level hash. Nested keys
   ## are represented with dot notation.
   ##
   ## Reference:
@@ -78,10 +78,10 @@ class Hash
         v.flatten_hash.map do |h_k, h_v|
           h["#{k}.#{h_k}".to_sym] = h_v
         end
-      else 
+      else
         h[k] = v
       end
-    end    
+    end
   end
 
 end

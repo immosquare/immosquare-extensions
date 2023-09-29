@@ -24,7 +24,7 @@ class String
   end
 
   ##============================================================##
-  ## Provide a custom titleize method to handle strings 
+  ## Provide a custom titleize method to handle strings
   ## especially ones with hyphens more appropriately.
   ## Standard titleize does not preserve hyphens in the desired manner.
   ##
@@ -40,9 +40,9 @@ class String
   end
 
   ##============================================================##
-  ## Overriding the standard upcase method to provide a more 
+  ## Overriding the standard upcase method to provide a more
   ## comprehensive version that correctly handles Unicode characters.
-  ## 
+  ##
   ## Example:
   ## "José".upcase => "JOSÉ"
   ##============================================================##

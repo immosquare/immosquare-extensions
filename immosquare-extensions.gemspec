@@ -6,7 +6,7 @@ Gem::Specification.new do |spec|
   spec.license       = "MIT"
   spec.name          = "immosquare-extensions"
   spec.version       = ImmosquareExtensions::VERSION.dup
-  
+
   spec.authors       = ["IMMO SQUARE"]
   spec.email         = ["jules@immosquare.com"]
   spec.homepage      = "https://github.com/IMMOSQUARE/immosquare-extensions"
@@ -14,11 +14,10 @@ Gem::Specification.new do |spec|
   spec.summary       = "Utility extensions for Ruby core classes"
   spec.description   = "The immosquare-extensions gem provides a set of utility extensions for various Ruby core classes such as String, Hash, and Array. These extensions aim to enhance the standard functionality, offering more convenience and efficiency for Ruby developers."
 
-  
+
   spec.files         = Dir["lib/**/*"]
   spec.require_paths = ["lib"]
 
   spec.required_ruby_version = Gem::Requirement.new(">= 2.7.2")
   spec.add_dependency("unicode_utils",  "~> 1.4.0")
-  
 end

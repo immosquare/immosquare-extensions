@@ -107,7 +107,7 @@ namespace :immosquare_extensions do
         :empty_hash     => {},
         :empty_array    => []
       }
-      puts hash.to_beautiful_json
+      puts hash.to_beautiful_json(:align => true, :indent_size => 2)
     end
   end
 end

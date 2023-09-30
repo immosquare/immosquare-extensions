@@ -41,13 +41,13 @@ class Hash
   ## http://dan.doezema.com/2012/04/recursively-sort-ruby-hash-by-key/
   ##
   ## Example:
-  ## {b: 1, a: {d: 4, c: 3}}.sort_by_key(true) => {:a=>{:c=>3, :d=>4}, :b=>1}
+  ## {b: 1, a: {d: 4, c: 3}}.sort_by_key(:sort_by_key => true) => {:a=>{:c=>3, :d=>4}, :b=>1}
   ##============================================================##
-  def sort_by_key(recursive = false, &block)
+  def sort_by_key(recursive: false, &block)
     block ||= proc {|a, b| a.to_s.downcase.gsub("\"", "") <=> b.to_s.downcase.gsub("\"", "") }
     keys.sort(&block).each_with_object({}) do |key, seed|
       seed[key] = self[key]
-      seed[key] = seed[key].sort_by_key(true, &block) if recursive && seed[key].is_a?(Hash)
+      seed[key] = seed[key].sort_by_key(:recursive => true, &block) if recursive && seed[key].is_a?(Hash)
     end
   end
 
@@ -73,45 +73,62 @@ class Hash
     end
   end
 
+  ##============================================================##
+  ## Returns a beautifully formatted JSON string representation
+  ## of the hash.
+  ##
+  ## Options:
+  ## - :align => true | Whether to align the values in the output.
+  ## - :indent_size => 2 | The number of spaces to indent.
+  ##
+  ## Usage:
+  ## hash.to_beautiful_json(:align => true, :indent_size => 2)
+  ##============================================================##
   def to_beautiful_json(**options)
-    options = {
-      :align => true
-    }.merge(options)
-    options[:align] = true if [true, false].include?(options[:align])
+    options               = {}.merge(options)
+    options[:align]       = true if ![true, false].include?(options[:align])
+    options[:indent_size] = 2    if options[:indent_size].to_i == 0 || options[:indent_size].to_i > 10
 
-    dump_beautify_json(self, :align => options[:align])
+    dump_beautify_json(self, options[:align], options[:indent_size])
   end
 
 
   private
 
-  def dump_beautify_json(hash, align: false, indent: 0)
+  ##============================================================##
+  ## Helper method to convert value based on its type
+  ##============================================================##
+  def json_representation(value, align, indent_size, indent)
+    case value
+    when Hash, Array          then dump_beautify_json(value, align, indent_size, indent + indent_size)
+    when String               then "\"#{value}\""
+    when NilClass             then "null"
+    when TrueClass, FalseClas then value.to_s
+    else value
+    end
+  end
+
+  ##============================================================##
+  ## Helper method to recursively convert a hash or an array to
+  ## a beautifully formatted JSON string.
+  ##
+  ## It takes into consideration the alignment of key-value pairs
+  ## and the indentation for nested structures.
+  ##
+  ## Usage:
+  ## dump_beautify_json(input_hash, align, indent_size, indent)
+  ##============================================================##
+  def dump_beautify_json(hash, align, indent_size, indent = 0)
     space = " "
-    indent_size = 2
 
     if hash.is_a?(Hash)
       return "{}" if hash.empty?
 
-      # Si l'alignement est demandé, nous trouvons la longueur maximale des clés à ce niveau.
       max_key_length = align ? hash.keys.map(&:to_s).map(&:length).max : 0
 
-      # Génération du format JSON.
       json_parts = hash.map do |key, value|
-        value_str = case value
-                    when Hash, Array
-                      dump_beautify_json(value, :align => align, :indent => indent + indent_size)
-                    when String
-                      "\"#{value}\""
-                    when NilClass
-                      "null"
-                    when TrueClass, FalseClass
-                      value.to_s
-                    else
-                      value
-                    end
-
-        spacing = align ? space * (max_key_length - key.to_s.length + 1) : space
-
+        value_str = json_representation(value, align, indent_size, indent)
+        spacing   = align ? space * (max_key_length - key.to_s.length + 1) : space
         "#{space * (indent + indent_size)}\"#{key}\":#{spacing}#{value_str}"
       end
 
@@ -120,21 +137,8 @@ class Hash
       return "[]" if hash.empty?
 
       array_parts = hash.map do |value|
-        value_str = case value
-                    when Hash, Array
-                      dump_beautify_json(value, :align => align, :indent => indent + indent_size)
-                    when String
-                      "\"#{value}\""
-                    when NilClass
-                      "null"
-                    when TrueClass, FalseClass
-                      value.to_s
-                    else
-                      value
-                    end
-        "#{space * (indent + indent_size)}#{value_str}"
+        "#{space * (indent + indent_size)}#{json_representation(value, align, indent_size, indent)}"
       end
-
       "[\n#{array_parts.join(",\n")}\n#{space * indent}]"
     end
   end

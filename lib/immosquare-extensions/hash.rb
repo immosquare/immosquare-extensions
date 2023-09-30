@@ -27,7 +27,9 @@ class Hash
   ## {a: {b: {c: 1}}}.depth => 3
   ##============================================================##
   def depth
-    1 + values.map {|v| v.is_a?(Hash) ? v.depth : 1 }.max
+    return 0 unless any?
+
+    1 + values.map {|v| v.is_a?(Hash) ? v.depth : 0 }.max
   end
 
   ##============================================================##

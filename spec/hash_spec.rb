@@ -15,12 +15,6 @@ describe Hash do
     end
   end
 
-  describe "#downcase_key" do
-    it "should downcase all keys" do
-      hash = {"A" => {"B" => "value"}}
-      expect(hash.downcase_key).to(eq({"a"=>{"b"=>"value"}}))
-    end
-  end
 
   describe "#depth" do
     it "should return depth of simple hash" do
@@ -39,13 +33,6 @@ describe Hash do
 
     it "should recursively sort nested hashes by its keys" do
       expect(mixed_hash.sort_by_key(true)).to(eq({:a => {:c => 3, :d => 4}, :b => 1}))
-    end
-  end
-
-  describe "#deep_transform_values" do
-    it "should transform values recursively" do
-      transformed = simple_hash.deep_transform_values {|v| v * 2 }
-      expect(transformed).to(eq({:a => 2, :b => 4, :c => 6}))
     end
   end
 

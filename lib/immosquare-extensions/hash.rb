@@ -100,10 +100,10 @@ class Hash
   ##============================================================##
   def json_representation(value, align, indent_size, indent)
     case value
-    when Hash, Array          then dump_beautify_json(value, align, indent_size, indent + indent_size)
-    when String               then "\"#{value}\""
-    when NilClass             then "null"
-    when TrueClass, FalseClas then value.to_s
+    when Hash, Array           then dump_beautify_json(value, align, indent_size, indent + indent_size)
+    when String                then "\"#{value}\""
+    when NilClass              then "null"
+    when TrueClass, FalseClass then value.to_s
     else value
     end
   end

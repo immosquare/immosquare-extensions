@@ -35,6 +35,7 @@ class Hash
   ##============================================================##
   ## Sort a hash by its keys. If the recursive flag is true,
   ## it will sort nested hashes as well.
+  ## case-insensitive comparison and stripping of double quotes.
   ##
   ## Reference:
   ## http://dan.doezema.com/2012/04/recursively-sort-ruby-hash-by-key/
@@ -43,6 +44,7 @@ class Hash
   ## {b: 1, a: {d: 4, c: 3}}.sort_by_key(true) => {:a=>{:c=>3, :d=>4}, :b=>1}
   ##============================================================##
   def sort_by_key(recursive = false, &block)
+    block ||= proc {|a, b| a.to_s.downcase.gsub("\"", "") <=> b.to_s.downcase.gsub("\"", "") }
     keys.sort(&block).each_with_object({}) do |key, seed|
       seed[key] = self[key]
       seed[key] = seed[key].sort_by_key(true, &block) if recursive && seed[key].is_a?(Hash)

@@ -83,6 +83,9 @@ class Hash
   def dump_beautify_json(hash, align: false, indent: 0)
     return hash.to_s unless hash.is_a?(Hash)
 
+    space = " "
+    indent_size = 2
+
     # Si l'alignement est demandé, nous trouvons la longueur maximale des clés à ce niveau.
     max_key_length = align ? hash.keys.map(&:to_s).map(&:length).max : 0
 
@@ -90,18 +93,20 @@ class Hash
     json_parts = hash.map do |key, value|
       value_str = case value
                   when Hash
-                    dump_beautify_json(value, :align => align, :indent => indent + 2)
+                    dump_beautify_json(value, :align => align, :indent => indent + indent_size)
                   else
                     value.to_s
                   end
 
-      spacing = align ? " " * (max_key_length - key.to_s.length + 1) : " "
+      spacing = align ? space * (max_key_length - key.to_s.length + 1) : space
 
-      "#{" " * indent}\"#{key}\":#{spacing}#{value_str}"
+      "#{space * (indent + indent_size)}\"#{key}\":#{spacing}#{value_str}" # Augmenter l'indentation selon la taille d'indentation
     end
 
-    "{\n#{json_parts.join(",\n")}\n#{" " * [0, indent - 2].max}}"
+    "{\n#{json_parts.join(",\n")}\n#{space * indent}}"
   end
+
+
 
 
 

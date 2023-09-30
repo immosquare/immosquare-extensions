@@ -28,11 +28,11 @@ describe Hash do
 
   describe "#sort_by_key" do
     it "should sort hash by its keys" do
-      expect(mixed_hash.sort_by_key).to(eq({:a => {:d => 4, :c => 3}, :b => 1}))
+      expect(mixed_hash.sort_by_key(:recursive => false)).to(eq({:a => {:d => 4, :c => 3}, :b => 1}))
     end
 
     it "should recursively sort nested hashes by its keys" do
-      expect(mixed_hash.sort_by_key(:recursive => true)).to(eq({:a => {:c => 3, :d => 4}, :b => 1}))
+      expect(mixed_hash.sort_by_key).to(eq({:a => {:c => 3, :d => 4}, :b => 1}))
     end
   end
 

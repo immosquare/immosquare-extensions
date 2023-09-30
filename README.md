@@ -70,7 +70,8 @@ $ gem install immosquare-extensions
 `.sort_by_key` (Sort a hash by its keys, and optionally sort nested hashes recursively.)
 
 ```ruby
-{b: 1, a: {d: 4, c: 3}}.sort_by_key(:recursive => true)  # => {:a=>{:c=>3, :d=>4}, :b=>1}
+{b: 1, a: {d: 4, c: 3}}.sort_by_key  # => {:a=>{:c=>3, :d=>4}, :b=>1}
+{b: 1, a: {d: 4, c: 3}}.sort_by_key(:recursive => false)  # => {:a=>{:d=>4, :c=>3}, :b=>1}
 ```
 
 `.flatten_hash` (Flatten nested hashes into a single-level hash with dot notation.)

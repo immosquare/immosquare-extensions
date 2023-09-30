@@ -1,4 +1,3 @@
-require "json"
 require "immosquare-extensions"
 
 namespace :immosquare_extensions do
@@ -9,6 +8,12 @@ namespace :immosquare_extensions do
     task :depth do
       hash = {:a => 1, :b => {:c => 2, :d => {:e => 3}}}
       puts hash.depth
+    end
+
+    task :sort_by_key do
+      hash = {:b => 1, :a => {:d => 4, :c => 3}}
+      puts hash.sort_by_key
+      puts hash.sort_by_key(:recursive => false)
     end
 
 

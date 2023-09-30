@@ -21,21 +21,6 @@ class Hash
   end
 
   ##============================================================##
-  ## Convert all keys of the hash to lowercase.
-  ## If a value is an array, it recursively processes the
-  ## nested hash elements.
-  ##
-  ## Example:
-  ## { "A" => { "B" => "value" } }.downcase_key => {"a"=>{"b"=>"value"}}
-  ##============================================================##
-  def downcase_key
-    keys.each do |k|
-      store(k.downcase, (v = delete(k)).is_a?(Array) ? v.map(&:downcase_key) : v)
-    end
-    self
-  end
-
-  ##============================================================##
   ## Calculate the depth (or level) of nesting within a hash.
   ##
   ## Example:
@@ -63,19 +48,6 @@ class Hash
   end
 
   ##============================================================##
-  ## Deep transform values resursively
-  ##============================================================##
-  def deep_transform_values(&block)
-    transform_values do |value|
-      if value.is_a?(Hash)
-        deep_transform_values(value, &block)
-      else
-        block.call(value)
-      end
-    end
-  end
-
-  ##============================================================##
   ## Flatten a nested hash into a single-level hash. Nested keys
   ## are represented with dot notation.
   ##
@@ -96,5 +68,9 @@ class Hash
       end
     end
   end
+
+
+
+
 
 end

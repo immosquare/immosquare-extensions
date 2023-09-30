@@ -60,11 +60,6 @@ $ gem install immosquare-extensions
 {a: 1, b: 2, c: 3}.without(:a, :b)  # => {:c=>3}
 ```
 
-`.downcase_key` (Recursively downcase all keys of a hash.)
-
-```ruby
-{ "A" => { "B" => "value" } }.downcase_key  # => {"a"=>{"b"=>"value"}}
-```
 
 `.depth` (Determine the depth of a nested hash.)
 
@@ -83,6 +78,78 @@ $ gem install immosquare-extensions
 ```ruby
 {a: {b: {c: 1}}}.flatten_hash  # => {:a.b.c=>1}
 ```
+
+
+...
+
+`.to_beautiful_json` (Render the hash into a beautifully formatted JSON string, with options for alignment and indentation.)
+
+**Options**:
+- `:align` (default is `true`): Aligns the colons in key-value pairs for better readability.
+- `:indent_size` (default is `2`): Specifies the number of spaces for each indentation level.
+
+**Example**:
+
+```ruby
+hash_example = {
+  name: "John",
+  age: 30,
+  address: {
+    street: "123 Apple St",
+    city: "FruitVille",
+    postal_code: "12345"
+  },
+  is_student: false,
+  courses: ["Math", "Science"]
+}
+
+puts hash_example.to_beautiful_json
+```
+
+**Output**:
+
+```json
+{
+  "name":       "John",
+  "age":        30,
+  "address":    {
+    "street":      "123 Apple St",
+    "city":        "FruitVille",
+    "postal_code": "12345"
+  },
+  "is_student": false,
+  "courses":    [
+    "Math",
+    "Science"
+  ]
+}
+```
+
+**Disabling Alignment**:
+
+```ruby
+puts hash_example.to_beautiful_json(align: false)
+```
+
+**Output**:
+
+```json
+{
+  "name": "John",
+  "age": 30,
+  "address": {
+    "street": "123 Apple St",
+    "city": "FruitVille",
+    "postal_code": "12345"
+  },
+  "is_student": false,
+  "courses": [
+    "Math",
+    "Science"
+  ]
+}
+```
+
 
 ## Contributing
 

@@ -73,6 +73,37 @@ class Hash
     end
   end
 
+  def to_beautiful_json
+    dump_beautify_json(self, :align => true)
+  end
+
+
+  private
+
+  def dump_beautify_json(hash, align: false, indent: 0)
+    return hash.to_s unless hash.is_a?(Hash)
+
+    # Si l'alignement est demandé, nous trouvons la longueur maximale des clés à ce niveau.
+    max_key_length = align ? hash.keys.map(&:to_s).map(&:length).max : 0
+
+    # Génération du format JSON.
+    json_parts = hash.map do |key, value|
+      value_str = case value
+                  when Hash
+                    dump_beautify_json(value, :align => align, :indent => indent + 2)
+                  else
+                    value.to_s
+                  end
+
+      spacing = align ? " " * (max_key_length - key.to_s.length + 1) : " "
+
+      "#{" " * indent}\"#{key}\":#{spacing}#{value_str}"
+    end
+
+    "{\n#{json_parts.join(",\n")}\n#{" " * [0, indent - 2].max}}"
+  end
+
+
 
 
 

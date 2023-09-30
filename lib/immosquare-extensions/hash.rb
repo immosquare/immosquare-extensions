@@ -73,44 +73,70 @@ class Hash
     end
   end
 
-  def to_beautiful_json
-    dump_beautify_json(self, :align => true)
+  def to_beautiful_json(**options)
+    options = {
+      :align => true
+    }.merge(options)
+    options[:align] = true if [true, false].include?(options[:align])
+
+    dump_beautify_json(self, :align => options[:align])
   end
 
 
   private
 
   def dump_beautify_json(hash, align: false, indent: 0)
-    return hash.to_s unless hash.is_a?(Hash)
-
     space = " "
     indent_size = 2
 
-    # Si l'alignement est demandé, nous trouvons la longueur maximale des clés à ce niveau.
-    max_key_length = align ? hash.keys.map(&:to_s).map(&:length).max : 0
+    if hash.is_a?(Hash)
+      return "{}" if hash.empty?
 
-    # Génération du format JSON.
-    json_parts = hash.map do |key, value|
-      value_str = case value
-                  when Hash
-                    dump_beautify_json(value, :align => align, :indent => indent + indent_size)
-                  else
-                    value.to_s
-                  end
+      # Si l'alignement est demandé, nous trouvons la longueur maximale des clés à ce niveau.
+      max_key_length = align ? hash.keys.map(&:to_s).map(&:length).max : 0
 
-      spacing = align ? space * (max_key_length - key.to_s.length + 1) : space
+      # Génération du format JSON.
+      json_parts = hash.map do |key, value|
+        value_str = case value
+                    when Hash, Array
+                      dump_beautify_json(value, :align => align, :indent => indent + indent_size)
+                    when String
+                      "\"#{value}\""
+                    when NilClass
+                      "null"
+                    when TrueClass, FalseClass
+                      value.to_s
+                    else
+                      value
+                    end
 
-      "#{space * (indent + indent_size)}\"#{key}\":#{spacing}#{value_str}" # Augmenter l'indentation selon la taille d'indentation
+        spacing = align ? space * (max_key_length - key.to_s.length + 1) : space
+
+        "#{space * (indent + indent_size)}\"#{key}\":#{spacing}#{value_str}"
+      end
+
+      "{\n#{json_parts.join(",\n")}\n#{space * indent}}"
+    elsif hash.is_a?(Array)
+      return "[]" if hash.empty?
+
+      array_parts = hash.map do |value|
+        value_str = case value
+                    when Hash, Array
+                      dump_beautify_json(value, :align => align, :indent => indent + indent_size)
+                    when String
+                      "\"#{value}\""
+                    when NilClass
+                      "null"
+                    when TrueClass, FalseClass
+                      value.to_s
+                    else
+                      value
+                    end
+        "#{space * (indent + indent_size)}#{value_str}"
+      end
+
+      "[\n#{array_parts.join(",\n")}\n#{space * indent}]"
     end
-
-    "{\n#{json_parts.join(",\n")}\n#{space * indent}}"
   end
-
-
-
-
-
-
-
 
 end

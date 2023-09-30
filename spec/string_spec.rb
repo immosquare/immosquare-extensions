@@ -1,5 +1,9 @@
-require "immosquare-extensions/string"
+require "immosquare-extensions"
+require "spec_helper"
 
+##============================================================##
+## bundle exec rspec spec/string_spec.rb
+##============================================================##
 RSpec.describe(String) do
   describe "#to_boolean" do
     it "converts 'true' to true" do

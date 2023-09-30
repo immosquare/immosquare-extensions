@@ -63,6 +63,19 @@ class Hash
   end
 
   ##============================================================##
+  ## Deep transform values resursively
+  ##============================================================##
+  def deep_transform_values(&block)
+    transform_values do |value|
+      if value.is_a?(Hash)
+        deep_transform_values(value, &block)
+      else
+        block.call(value)
+      end
+    end
+  end
+
+  ##============================================================##
   ## Flatten a nested hash into a single-level hash. Nested keys
   ## are represented with dot notation.
   ##

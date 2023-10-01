@@ -1,6 +1,6 @@
-require "immosquare-extensions/array"
-require "immosquare-extensions/hash"
-require "immosquare-extensions/string"
+require_relative "immosquare-extensions/array"
+require_relative "immosquare-extensions/hash"
+require_relative "immosquare-extensions/string"
 
 module ImmosquareExtensions
   private

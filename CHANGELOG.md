@@ -1,5 +1,10 @@
 ## [Unreleased]
 
+## [0.1.8] - 2023-09-30
+
+- Add josn Method to Array
+
+
 ## [0.1.7] - 2023-09-30
 
 - Improve JSON output

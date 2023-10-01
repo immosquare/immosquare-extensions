@@ -3,6 +3,8 @@
 ##============================================================##
 class Array
 
+  include ImmosquareExtensions
+
   ##============================================================##
   ## Calculate the average (mean) of an array of numbers.
   ## The mean is the sum of the numbers divided by the count.
@@ -17,5 +19,24 @@ class Array
   def mean
     sum(0.0) / size
   end
+
+  ##============================================================##
+  ## A json file can be a hash or an array. This method will
+  ## test.json
+  ## [
+  ##  {"name": "Alice"},
+  ##  {"name": "Bob"},
+  ##   123,
+  ##  "string"
+  ## ]
+  ##============================================================##
+  def to_beautiful_json(**options)
+    options               = {}.merge(options)
+    options[:align]       = true if ![true, false].include?(options[:align])
+    options[:indent_size] = 2    if options[:indent_size].to_i == 0 || options[:indent_size].to_i > 10
+
+    dump_beautify_json(self, options[:align], options[:indent_size])
+  end
+
 
 end

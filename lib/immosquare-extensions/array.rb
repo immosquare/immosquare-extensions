@@ -1,4 +1,4 @@
-require_relative "../immosquare-extensions"
+require "immosquare-extensions"
 
 ##============================================================##
 ## This extension adds utility methods to the Array class.

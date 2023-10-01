@@ -1,5 +1,9 @@
 ## [Unreleased]
 
+## [0.1.9] - 2023-09-30
+
+- Improve includes
+
 ## [0.1.8] - 2023-09-30
 
 - Add josn Method to Array

@@ -124,7 +124,7 @@ class Hash
     if hash.is_a?(Hash)
       return "{}" if hash.empty?
 
-      if hash.keys.count == 1
+      if hash.keys.count == 1 && indent > 0
         key, value = hash.first
         value_str = json_representation(value, align, indent_size, indent)
         return "{\"#{key}\": #{value_str}}"
@@ -147,7 +147,7 @@ class Hash
     elsif hash.is_a?(Array)
       return "[]" if hash.empty?
 
-      if hash.length == 1
+      if hash.length == 1 && !hash.first.is_a?(Hash)
         value_str = json_representation(hash.first, align, indent_size, indent)
         return "[#{value_str}]"
       end

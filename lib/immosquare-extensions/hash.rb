@@ -1,5 +1,3 @@
-require "immosquare-extensions"
-
 ##============================================================##
 ## This extension adds utility methods to the Hash class.
 ## It includes methods for handling and manipulating the keys
@@ -7,7 +5,7 @@ require "immosquare-extensions"
 ##============================================================##
 class Hash
 
-  include ImmosquareExtensions
+  include ImmosquareExtensions::SharedMethods
 
   ##============================================================##
   ## Remove multiple keys from a hash in a single command.

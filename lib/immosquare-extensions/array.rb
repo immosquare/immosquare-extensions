@@ -1,11 +1,9 @@
-require "immosquare-extensions"
-
 ##============================================================##
 ## This extension adds utility methods to the Array class.
 ##============================================================##
 class Array
 
-  include ImmosquareExtensions
+  include ImmosquareExtensions::SharedMethods
 
   ##============================================================##
   ## Calculate the average (mean) of an array of numbers.

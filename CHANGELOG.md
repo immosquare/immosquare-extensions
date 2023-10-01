@@ -1,5 +1,9 @@
 ## [Unreleased]
 
+## [0.1.6] - 2023-09-30
+
+- Improve JSON output
+
 ## [0.1.5] - 2023-09-30
 
 - fix spelling

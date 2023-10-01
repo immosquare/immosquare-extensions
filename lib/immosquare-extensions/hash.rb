@@ -134,7 +134,12 @@ class Hash
 
       json_parts = hash.map do |key, value|
         value_str = json_representation(value, align, indent_size, indent)
-        spacing   = align ? space * (max_key_length - key.to_s.length + 1) : space
+        spacing   =
+          if value.is_a?(Hash)
+            space
+          else
+            align ? space * (max_key_length - key.to_s.length + 1) : space
+          end
         "#{space * (indent + indent_size)}\"#{key}\":#{spacing}#{value_str}"
       end
 
@@ -153,5 +158,6 @@ class Hash
       "[\n#{array_parts.join(",\n")}\n#{space * indent}]"
     end
   end
+
 
 end

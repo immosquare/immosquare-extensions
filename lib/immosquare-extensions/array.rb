@@ -1,3 +1,5 @@
+require "immosqaure-extensions"
+
 ##============================================================##
 ## This extension adds utility methods to the Array class.
 ##============================================================##

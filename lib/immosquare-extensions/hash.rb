@@ -1,3 +1,5 @@
+require "immosqaure-extensions"
+
 ##============================================================##
 ## This extension adds utility methods to the Hash class.
 ## It includes methods for handling and manipulating the keys

@@ -1,5 +1,9 @@
 ## [Unreleased]
 
+## [0.1.11] - 2023-09-30
+
+- Improve JSON formatter
+
 ## [0.1.10] - 2023-09-30
 
 - Improve includes

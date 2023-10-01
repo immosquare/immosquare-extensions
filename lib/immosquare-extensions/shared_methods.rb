@@ -33,8 +33,10 @@ module ImmosquareExtensions
 
         if hash.keys.count == 1 && indent > 0
           key, value = hash.first
-          value_str = json_representation(value, align, indent_size, indent)
-          return "{\"#{key}\": #{value_str}}"
+          if !value.is_a?(Array)
+            value_str = json_representation(value, align, indent_size, indent)
+            return "{\"#{key}\": #{value_str}}"
+          end
         end
 
         max_key_length = align ? hash.keys.map(&:to_s).map(&:length).max : 0

@@ -1,5 +1,7 @@
 module ImmosquareExtensions
   module SharedMethods
+    private
+
     ##============================================================##
     ## Helper method to convert value based on its type
     ##============================================================##

@@ -70,10 +70,14 @@ namespace :immosquare_extensions do
       }
       hash = {
         :personal       => {
-          :name       => "John Doe",
-          :age        => nil,
-          :is_student => false,
-          :courses    => [
+          :name        => "John Doe",
+          :age         => nil,
+          :is_student  => false,
+          :on_vacation =>
+                          [
+                            "2019-01-01"
+                          ],
+          :courses     => [
             {
               :name       => "Math 101",
               :topics     => ["Algebra", "Geometry", "Trigonometry"],

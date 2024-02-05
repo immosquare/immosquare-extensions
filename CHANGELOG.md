@@ -1,5 +1,9 @@
 ## [Unreleased]
 
+## [0.1.12] - 2024-02-05
+
+- Add File Extensions
+
 ## [0.1.11] - 2023-09-30
 
 - Improve JSON formatter

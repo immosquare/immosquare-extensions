@@ -86,7 +86,9 @@ $ gem install immosquare-extensions
 `.to_beautiful_json` (Render the hash into a beautifully formatted JSON string, with options for alignment and indentation.)
 
 **Options**:
+
 - `:align` (default is `true`): Aligns the colons in key-value pairs for better readability.
+
 - `:indent_size` (default is `2`): Specifies the number of spaces for each indentation level.
 
 **Example**:
@@ -149,6 +151,18 @@ puts hash_example.to_beautiful_json(align: false)
     "Science"
   ]
 }
+```
+
+
+## File Extensions
+
+#### Normalize Last Line
+
+Ensures that a file ends with a single newline character, facilitating cleaner multi-line blocks.
+
+```ruby
+total_lines = File.normalize_last_line('path/to/your/file.csv')
+puts "Total lines in the normalized file: #{total_lines}"
 ```
 
 

@@ -1,5 +1,9 @@
 ## [Unreleased]
 
+## [0.1.14] - 2024-02-06
+
+- Improve normalize_last_line for emtpy files
+
 ## [0.1.13] - 2024-02-05
 
 - Fix file Encoding

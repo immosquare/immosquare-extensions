@@ -14,6 +14,17 @@ class File
   ## The total number of lines in the normalized file.
   ##===========================================================================##
   def self.normalize_last_line(file_path)
+    ##============================================================##
+    ## Get the file size
+    ##============================================================##
+    file_size = File.size?(file_path)
+
+    ##============================================================##
+    ## If the file is empty (0 bytes), there's nothing to normalize.
+    ##============================================================##
+    return 0 if file_size.nil? || file_size == 0
+
+
     end_of_line = $INPUT_RECORD_SEPARATOR || "\n"
     ##============================================================##
     ## Read all lines from the file

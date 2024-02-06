@@ -1,5 +1,9 @@
 ## [Unreleased]
 
+## [0.1.13] - 2024-02-05
+
+- Fix file Encoding
+
 ## [0.1.12] - 2024-02-05
 
 - Add File Extensions

@@ -18,8 +18,13 @@ class File
     ##============================================================##
     ## Read all lines from the file
     ## https://gist.github.com/guilhermesimoes/d69e547884e556c3dc95
+    ## Detect the encoding of the file using uchardet
+    ## Read the content of the file with the detected encoding,
+    ## falling back to UTF-8 if the detected encoding is empty or invalid.
     ##============================================================##
-    content = File.read(file_path)
+    detected_encoding = `uchardet #{file_path}`.strip
+    encoding_to_use   = detected_encoding.empty? ? "UTF-8" : "#{detected_encoding}:UTF-8"
+    content           = File.read(file_path, :encoding => encoding_to_use)
 
     ##===========================================================================##
     ## Remove all trailing empty lines at the end of the file
@@ -34,7 +39,7 @@ class File
     ##===========================================================================##
     ## Write the modified lines back to the file
     ##===========================================================================##
-    File.write(file_path, content)
+    File.write(file_path, content, :encoding => encoding_to_use)
 
     ##===========================================================================##
     ## Return the total number of lines in the modified file

@@ -33,8 +33,41 @@ class File
     ## Read the content of the file with the detected encoding,
     ## falling back to UTF-8 if the detected encoding is empty or invalid.
     ##============================================================##
-    detected_encoding = `uchardet #{file_path}`.strip
-    encoding_to_use   = detected_encoding.empty? ? "UTF-8" : "#{detected_encoding}:UTF-8"
+    detected_encoding  = `uchardet #{file_path}`.strip
+    encoding_whitelist = [
+      "UTF-8",            # Encodage universel pour texte avec ou sans accents
+      "Windows-1252",     # Utilisé couramment pour les langues occidentales
+      "ISO-8859-1",       # L'encodage Latin-1, très utilisé en Europe Occidentale
+      "Windows-1250",     # Europe Centrale et Orientale
+      "ISO-8859-2",       # Pour les langues d'Europe Centrale
+      "Windows-1251",     # Cyrillic; utilisé pour le russe, bulgare, serbe cyrillique
+      "KOI8-R",           # Russe
+      "ISO-8859-5",       # Encodage cyrillique
+      "ISO-8859-7",       # Grec
+      "Windows-1253",     # Grec
+      "ISO-8859-9",       # Turc
+      "Windows-1254",     # Turc
+      "ISO-8859-15",      # Variante de l'ISO-8859-1 qui couvre plus de caractères
+      "Windows-1256",     # Arabe
+      "ISO-8859-6",       # Arabe
+      "Windows-1255",     # Hébreu
+      "ISO-8859-8",       # Hébreu
+      "Big5",             # Chinois traditionnel
+      "GB2312",           # Chinois simplifié
+      "Shift_JIS",        # Japonais
+      "EUC-JP",           # Japonais
+      "EUC-KR",           # Coréen
+      "ISO-2022-JP",      # Encodage pour le courrier électronique en japonais
+      "ISO-2022-KR",      # Coréen
+      "ISO-2022-CN",      # Chinois
+      "UTF-16LE",         # UTF-16 Little Endian
+      "UTF-16BE",         # UTF-16 Big Endian
+      "UTF-32LE",         # UTF-32 Little Endian
+      "UTF-32BE"          # UTF-32 Big Endian
+    ]
+
+
+    encoding_to_use   = detected_encoding.empty? || !encoding_whitelist.include?(detected_encoding) ? "UTF-8" : "#{detected_encoding}:UTF-8"
     content           = File.read(file_path, :encoding => encoding_to_use)
 
     ##===========================================================================##

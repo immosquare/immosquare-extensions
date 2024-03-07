@@ -33,7 +33,7 @@ class File
     ## Read the content of the file with the detected encoding,
     ## falling back to UTF-8 if the detected encoding is empty or invalid.
     ##============================================================##
-    detected_encoding  = `uchardet #{file_path}`.strip
+    detected_encoding  = `uchardet #{file_path}`.strip.to_s.upcase
     encoding_whitelist = [
       "UTF-8",            # Encodage universel pour texte avec ou sans accents
       "Windows-1252",     # Utilisé couramment pour les langues occidentales
@@ -64,7 +64,8 @@ class File
       "UTF-16BE",         # UTF-16 Big Endian
       "UTF-32LE",         # UTF-32 Little Endian
       "UTF-32BE"          # UTF-32 Big Endian
-    ]
+    ].map(&:upcase)
+
 
 
     encoding_to_use   = detected_encoding.empty? || !encoding_whitelist.include?(detected_encoding) ? "UTF-8" : "#{detected_encoding}:UTF-8"

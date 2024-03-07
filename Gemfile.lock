@@ -1,7 +1,7 @@
 PATH
   remote: .
   specs:
-    immosquare-extensions (0.1.15)
+    immosquare-extensions (0.1.16)
       unicode_utils (~> 1.4.0)
 
 GEM

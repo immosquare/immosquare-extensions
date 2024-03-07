@@ -1,5 +1,9 @@
 ## [Unreleased]
 
+## [0.1.16] - 2024-03-07
+
+- Fix issue with encoding whitelist
+
 ## [0.1.15] - 2024-03-04
 
 - Add Whitelist for encoding

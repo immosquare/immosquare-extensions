@@ -1,5 +1,9 @@
 ## [Unreleased]
 
+## [0.1.18] - 2024-03-14
+
+improve escaped_value method
+
 ## [0.1.17] - 2024-03-14
 
 - Improve cleaner for \n\r characters

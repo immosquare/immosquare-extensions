@@ -21,8 +21,8 @@ namespace :immosquare_extensions do
     ## bundle exec rake immosquare_extensions:sample:json
     ##============================================================##
     task :json do
-      hash = {:key => "abc", :key_2 => "abc\r\ndef", :key_abcdef => 2, :b => {:c => 2, :d_abcd => {:e => 3}}}
-      hash = {
+      hash1 = {:key => "abc", :key_2 => "abc\r\ndef", :key_3 => "abc\r\ndef\n\"ghi\"\tjkl", :key_abcdef => 2, :b => {:c => 2, :d_abcd => {:e => 3}}}
+      hash2 = {
         :id       => 123_456,
         :name     => "John Doe",
         :active   => true,
@@ -68,7 +68,7 @@ namespace :immosquare_extensions do
           }
         }
       }
-      hash = {
+      hash3 = {
         :personal       => {
           :name        => "John Doe",
           :age         => nil,
@@ -116,7 +116,7 @@ namespace :immosquare_extensions do
         :empty_hash     => {},
         :empty_array    => []
       }
-      puts hash.to_beautiful_json(:align => true, :indent_size => 2)
+      puts hash1.to_beautiful_json(:align => true, :indent_size => 2)
     end
   end
 end

@@ -10,7 +10,12 @@ module ImmosquareExtensions
       when Hash, Array
         dump_beautify_json(value, align, indent_size, indent + indent_size)
       when String
-        escaped_value = value.gsub("\n", "\\n").gsub("\r", "\\r")
+        escaped_value = value
+          .gsub("\\", "\\\\\\")
+          .gsub("\"", "\\\"")
+          .gsub("\r", "\\r")
+          .gsub("\n", "\\n")
+          .gsub("\t", "\\t")
         "\"#{escaped_value}\""
       when NilClass
         "null"

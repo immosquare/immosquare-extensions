@@ -1,5 +1,9 @@
 ## [Unreleased]
 
+## [0.1.17] - 2024-03-14
+
+- Improve cleaner for \n\r characters
+
 ## [0.1.16] - 2024-03-07
 
 - Fix issue with encoding whitelist

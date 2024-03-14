@@ -21,7 +21,7 @@ namespace :immosquare_extensions do
     ## bundle exec rake immosquare_extensions:sample:json
     ##============================================================##
     task :json do
-      hash = {:key => "abc", :key_abcdef => 2, :b => {:c => 2, :d_abcd => {:e => 3}}}
+      hash = {:key => "abc", :key_2 => "abc\r\ndef", :key_abcdef => 2, :b => {:c => 2, :d_abcd => {:e => 3}}}
       hash = {
         :id       => 123_456,
         :name     => "John Doe",

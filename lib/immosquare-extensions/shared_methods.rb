@@ -7,11 +7,17 @@ module ImmosquareExtensions
     ##============================================================##
     def json_representation(value, align, indent_size, indent)
       case value
-      when Hash, Array           then dump_beautify_json(value, align, indent_size, indent + indent_size)
-      when String                then "\"#{value}\""
-      when NilClass              then "null"
-      when TrueClass, FalseClass then value.to_s
-      else value
+      when Hash, Array
+        dump_beautify_json(value, align, indent_size, indent + indent_size)
+      when String
+        escaped_value = value.gsub("\n", "\\n").gsub("\r", "\\r")
+        "\"#{escaped_value}\""
+      when NilClass
+        "null"
+      when TrueClass, FalseClass
+        value.to_s
+      else
+        value.to_s
       end
     end
 

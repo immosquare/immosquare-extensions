@@ -1,5 +1,9 @@
 ## [Unreleased]
 
+## [0.1.19] - 2024-05-05
+
+Add mailer Helper for Rails emails preview
+
 ## [0.1.18] - 2024-03-14
 
 improve escaped_value method
@@ -43,7 +47,6 @@ improve escaped_value method
 ## [0.1.8] - 2023-09-30
 
 - Add josn Method to Array
-
 
 ## [0.1.7] - 2023-09-30
 

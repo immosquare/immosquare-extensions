@@ -1,5 +1,9 @@
 ## [Unreleased]
 
+## [0.1.20] - 2024-05-06
+
+back to locale parameter
+
 ## [0.1.19] - 2024-05-05
 
 Add mailer Helper for Rails emails preview

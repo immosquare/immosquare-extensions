@@ -1,3 +1,3 @@
 module ImmosquareExtensions
-  VERSION = "0.1.19".freeze
+  VERSION = "0.1.20".freeze
 end

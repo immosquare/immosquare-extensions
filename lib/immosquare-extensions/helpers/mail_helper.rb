@@ -17,7 +17,7 @@ module ImmosquareExtensions
                         {:name => name, :url => url_for(:part => name)}
                       end,
           :locales => I18n.available_locales.map do |locale|
-            {:name => locale, :url => url_for(:mailer_locale => locale)}
+            {:name => locale, :url => url_for(:locale => locale)}
           end
         },
         :inline => <<~HTML

@@ -1,5 +1,5 @@
 module ImmosquareExtensions
-  module MailHelper
+  module PreviewMailerHelper
     ##============================================================##
     ## Inspired by:
     ## https://github.com/rails/rails/blob/main/railties/lib/rails/templates/rails/mailers/email.html.erb

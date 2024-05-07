@@ -1,5 +1,9 @@
 ## [Unreleased]
 
+## [0.1.22] - 2024-05-07
+
+change helper name to avoid collision
+
 ## [0.1.21] - 2024-05-07
 
 refactor mailer Helper

@@ -32,7 +32,7 @@ GEM
       erubi (~> 1.4)
       parser (>= 2.4)
       smart_properties
-    bigdecimal (3.1.7)
+    bigdecimal (3.1.8)
     builder (3.2.4)
     concurrent-ruby (1.2.3)
     connection_pool (2.4.1)
@@ -48,7 +48,7 @@ GEM
       smart_properties
     erubi (1.12.0)
     htmlbeautifier (1.4.3)
-    i18n (1.14.4)
+    i18n (1.14.5)
       concurrent-ruby (~> 1.0)
     immosquare-cleaner (0.1.32)
       erb_lint (~> 0)

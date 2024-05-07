@@ -1,5 +1,9 @@
 ## [Unreleased]
 
+## [0.1.21] - 2024-05-07
+
+refactor mailer Helper
+
 ## [0.1.20] - 2024-05-06
 
 back to locale parameter

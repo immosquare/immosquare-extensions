@@ -12,12 +12,13 @@ module ImmosquareExtensions
         :layout => false,
         :locals => {
           :email   => email,
-          :formats => get_email_formats(email).map do |format|
-                        name = format.split("/").last
-                        {:name => name, :url => url_for(:part => name)}
-                      end,
+          :formats => get_email_formats(email),
           :locales => I18n.available_locales.map do |locale|
-            {:name => locale, :url => url_for(:locale => locale)}
+            {
+              :name      => locale,
+              :url       => url_for(:mailer_locale => locale, :part => params[:part].presence),
+              :css_class => (params[:mailer_locale].present? && params[:mailer_locale] == locale.to_s) || (params[:mailer_locale].blank? && I18n.locale == locale) ? "" : "text-body"
+            }
           end
         },
         :inline => <<~HTML
@@ -82,7 +83,7 @@ module ImmosquareExtensions
                 <th>Formats:</th>
                 <td>
                 <% formats.each do |format| %>
-                  <%= link_to(format[:name], format[:url]) %>
+                  <%= link_to(format[:name], format[:url], :class => "text-decoration-none hover-primary" + " " + format[:css_class]) %>
                   <%= content_tag(:span, " | ") unless format == formats.last %>
                 <% end %>
                 </td>
@@ -93,7 +94,8 @@ module ImmosquareExtensions
                 <th>Locale:</th>
                 <td>
                   <% locales.each do |locale| %>
-                    <%= link_to(locale[:name], locale[:url]) %>
+                    <%= link_to(locale[:name], locale[:url], :class => "text-decoration-none hover-primary" + " " + locale[:css_class]) %>
+                    <%= content_tag(:span, " | ") unless locale == locales.last %>
                   <% end %>
                 </td>
               </tr>
@@ -137,11 +139,14 @@ module ImmosquareExtensions
 
     def display_email_preview(email)
       begin
-        availabe_formats = get_email_formats(email)
-        part_format      = params[:part].present? ? availabe_formats.find {|format| format.end_with?(params[:part]) } : availabe_formats.first
-        part_format      = availabe_formats.first if part_format.nil?
-        parts            = get_email_parts(email)
-        parts.find {|part| part[:content_type] == part_format }[:body]
+        formats     = get_email_formats(email)
+        part_format = formats.find {|f| f[:selected] }
+        part_type   = Mime::Type.lookup(part_format[:content_type])
+
+        raise("No email part found for content type: #{part_format[:content_type]}") if !(part = find_part(email, part_type))
+
+        body = part.respond_to?(:decoded) ? part.decoded : part
+        part_format[:name] == "html" ? body.html_safe : simple_format(body)
       rescue StandardError => e
         "Error displaying email: #{e.message}"
       end
@@ -151,57 +156,52 @@ module ImmosquareExtensions
 
 
     ##============================================================##
-    ## Return email formats
-    ## ["text/plain", "text/html"]
-    ## ["text/html"]
-    ## ["text/plain"]
+    ## find_first_mime_type is a method from the Mail gem for module
+    ## Mail Message
+    ## ----------------
+    ## https://github.com/mikel/mail/blob/master/lib/mail/message.rb#L1938
     ##============================================================##
-    def get_email_formats(email)
-      content_types         = email.parts.map(&:content_type)
-      content_types_allowed = ["text/html", "text/plain"]
-      if !email.multipart? || content_types.empty?
-        if email.header_fields.nil? || email.header_fields.empty?
-          ["text/plain"]
-        else
-          header       = email.header_fields.find {|header| header.name == "Content-Type" }
-          [header.nil? || !content_types_allowed.include?(header.value) ? "text/plain" : header.value]
+    def find_preferred_part(email, *formats)
+      formats.each do |format|
+        if (part = email.find_first_mime_type(format))
+          return part
         end
-      else
-        content_types.map do |content_type|
-          content_type = content_type.split(";").first
-          content_types_allowed.include?(content_type) ? content_type : nil
-        end
-          .compact.sort_by do |content_type|
-          content_types_allowed.index(content_type)
-        end
+      end
+
+      email if formats.any? {|f| email.mime_type == f }
+    end
+
+    ##============================================================##
+    ## find_part use the find_first_mime_type method from the Mail
+    ## gem for module Mail Message
+    ##============================================================##
+    def find_part(email, format)
+      if (part = email.find_first_mime_type(format))
+        part
+      elsif email.mime_type == format
+        email
       end
     end
 
     ##============================================================##
-    ## Return email parts with content type and body
+    ## Return email formats
     ##============================================================##
-    def get_email_parts(email)
-      parts_type = email.parts.map(&:content_type)
-      if !email.multipart? || parts_type.empty?
-        if email.header_fields.nil? || email.header_fields.empty?
-          content_type = "text/plain"
-        else
-          header       = email.header_fields.find {|header| header.name == "Content-Type" }
-          content_type = header.nil? ? "text/plain" : header.value
+    def get_email_formats(email)
+      part    = find_preferred_part(email, Mime[:html], Mime[:text])
+      formats = []
+      formats =
+        if email.html_part && email.text_part
+          selected = params[:part].present? && params[:part] == "text" ? "text" : "html"
+          [
+            {:name => "html", :content_type => "text/html",  :url => url_for(:part => "html", :mailer_locale => params[:mailer_locale].presence), :selected => selected == "html",  :css_class => selected == "html" ? "" : "text-body"},
+            {:name => "text", :content_type => "text/plain", :url => url_for(:part => "text", :mailer_locale => params[:mailer_locale].presence), :selected => selected == "text",  :css_class => selected == "text" ? "" : "text-body"}
+          ]
+        elsif part
+          data = part.content_type.split(";").first.split("/").last
+          [
+            {:name => data, :content_type => "text/#{data}", :url => url_for(:part => data, :mailer_locale => params[:mailer_locale].presence), :selected => true,  :css_class => ""}
+          ]
         end
-        [{
-          :content_type => content_type,
-          :body         => content_type == "text/plain" ? simple_format(email.body.decoded) : email.body.decoded
-        }]
-      else
-        email.parts.map do |part|
-          content_type = part.content_type.split(";").first
-          {
-            :content_type => content_type,
-            :body         => content_type == "text/plain" ? simple_format(part.body.decoded) : part.body.decoded
-          }
-        end
-      end
     end
   end
 end

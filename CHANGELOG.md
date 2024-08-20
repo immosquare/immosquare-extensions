@@ -1,5 +1,9 @@
 ## [Unreleased]
 
+## [0.1.24] - 2024-08-20
+
+Add default_value for .to_boolean
+
 ## [0.1.23] - 2024-05-07
 
 fix missing change

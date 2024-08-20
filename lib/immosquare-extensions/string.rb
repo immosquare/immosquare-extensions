@@ -10,16 +10,19 @@ class String
   ## Any other value will return nil.
   ##
   ## Examples:
-  ## "true".to_boolean  => true
-  ## "false".to_boolean => false
-  ## "random".to_boolean => nil
+  ## "true".to_boolean          => true
+  ## "false".to_boolean         => false
+  ## "random".to_boolean        => nil
+  ## "random".to_boolean(true)  => true
   ##============================================================##
-  def to_boolean
+  def to_boolean(default_value = nil)
     case downcase
     when "true"
       true
     when "false"
       false
+    else
+      default_value
     end
   end
 

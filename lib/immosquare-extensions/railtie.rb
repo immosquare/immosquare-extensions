@@ -9,5 +9,12 @@ module ImmosquareExtensions
       end
     end
 
+    initializer "immosquare_extensions.active_record" do
+      ActiveSupport.on_load(:active_record) do
+        ActiveRecord::Base.include(ImmosquareExtensions::ApplicationRecord)
+      end
+    end
+
+
   end
 end

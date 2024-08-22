@@ -1,5 +1,9 @@
 ## [Unreleased]
 
+## [0.1.25] - 2024-08-22
+
+add new methods for application_record
+
 ## [0.1.24] - 2024-08-20
 
 Add default_value for .to_boolean

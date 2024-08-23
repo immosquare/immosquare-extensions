@@ -1,6 +1,6 @@
 # IMMO SQUARE Extensions
 
-Enhance your Ruby experience with utility methods for standard classes like `String`, `Array`, and `Hash`.
+Enhance your Ruby experience with utility methods for standard classes like `Application Record`, `Array`, `File`, `Hash`, `String`, ...
 
 ## Installation
 
@@ -22,29 +22,18 @@ Or install it yourself:
 $ gem install immosquare-extensions
 ```
 
-## String Extensions
+## 1- Application Record Extensions (for Rails App)
 
-`.to_boolean` (Convert strings like "true" and "false" to their boolean counterparts.)
-
-```ruby
-"true".to_boolean   # => true
-"false".to_boolean  # => false
-"string".to_boolean # => nil
-```
-
-`.titleize_custom` (Titleize strings while preserving hyphens, ideal for city names.)
+`.dig` (This method allows you to access nested attributes of an ActiveRecord model without having to manually check if each level is nil. It will return the value of the last key if all keys are present, or nil if any key is missing.)
 
 ```ruby
-"SANT-ANDREA-D'ORCINO".titleize_custom  # => "Sant-Andrea-D'orcino"
+user = User.first
+user.dig(:profile, :card_type, :slug)         # => "some-slug"
+user.dig(:profile, :non_existent_key, :slug)  # => nil
 ```
 
-`.upcase` (Upcase strings with proper Unicode handling.)
 
-```ruby
-"ä".upcase  # => "Ä"
-```
-
-## Array Extensions
+## 2- Array Extensions
 
 `.mean` (Compute the average of numerical arrays.)
 
@@ -52,7 +41,16 @@ $ gem install immosquare-extensions
 [1, 2, 3, 4, 5].mean   # => 3.0
 ```
 
-## Hash Extensions
+## 3- File Extensions
+
+`.normalize_last_line` (Ensures that a file ends with a single newline character, facilitating cleaner multi-line blocks.)
+
+```ruby
+total_lines = File.normalize_last_line('path/to/your/file.csv')
+puts "Total lines in the normalized file: #{total_lines}"
+```
+
+## 4- Hash Extensions
 
 `.without` (Remove multiple keys in one command.)
 
@@ -79,9 +77,6 @@ $ gem install immosquare-extensions
 ```ruby
 {a: {b: {c: 1}}}.flatten_hash  # => {:a.b.c=>1}
 ```
-
-
-...
 
 `.to_beautiful_json` (Render the hash into a beautifully formatted JSON string, with options for alignment and indentation.)
 
@@ -154,15 +149,28 @@ puts hash_example.to_beautiful_json(align: false)
 ```
 
 
-## File Extensions
+## 5 - String Extensions
 
-#### Normalize Last Line
-
-Ensures that a file ends with a single newline character, facilitating cleaner multi-line blocks.
+`.to_boolean` (Convert strings like "true" and "false" to their boolean counterparts.)
 
 ```ruby
-total_lines = File.normalize_last_line('path/to/your/file.csv')
-puts "Total lines in the normalized file: #{total_lines}"
+"true".to_boolean             # => true
+"true".to_boolean("hello")    # => true
+"false".to_boolean            # => false
+"string".to_boolean           # => nil
+"string".to_boolean("hello")  # => "hello"
+```
+
+`.titleize_custom` (Titleize strings while preserving hyphens, ideal for city names.)
+
+```ruby
+"SANT-ANDREA-D'ORCINO".titleize_custom  # => "Sant-Andrea-D'orcino"
+```
+
+`.upcase` (Upcase strings with proper Unicode handling.)
+
+```ruby
+"ä".upcase  # => "Ä"
 ```
 
 

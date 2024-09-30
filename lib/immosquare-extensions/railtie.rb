@@ -11,7 +11,15 @@ module ImmosquareExtensions
 
     initializer "immosquare_extensions.active_record" do
       ActiveSupport.on_load(:active_record) do
+        ##============================================================##
+        ## Pour ajouter des méthodes à ActiveRecord::Base
+        ##============================================================##
         ActiveRecord::Base.include(ImmosquareExtensions::ApplicationRecord)
+
+        ##============================================================##
+        ## Pour ajouter une gestion de l'historique des modifications
+        ##============================================================##
+        extend ImmosquareExtensions::ApplicationRecordHistory::ClassMethods
       end
     end
 

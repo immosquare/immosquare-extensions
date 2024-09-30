@@ -47,8 +47,14 @@ module ImmosquareExtensions
         ##============================================================##
         return if changes_to_save.none?
 
-        JulesLogger.info("on doit save les changements")
-        JulesLogger.info(changes_to_save)
+        ##============================================================##
+        ## On crée un enregistrement dans la table d'historique
+        ##============================================================##
+        ImmosquareExtensions::ApplicationRecordHistory::HistoryRecord.create!(
+          :recordable => self,
+          :data       => changes_to_save,
+          :created_at => DateTime.now
+        )
       end
     end
   end

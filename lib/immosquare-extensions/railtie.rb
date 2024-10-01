@@ -15,18 +15,10 @@ module ImmosquareExtensions
         ## Pour ajouter des méthodes à ActiveRecord::Base
         ##============================================================##
         ActiveRecord::Base.include(ImmosquareExtensions::ApplicationRecord)
-
-        ##============================================================##
-        ## Pour ajouter une gestion de l'historique des modifications
-        ##============================================================##
-        extend ImmosquareExtensions::ApplicationRecordHistory::ClassMethods
-
-        ##============================================================##
-        ## Définir la classe HistoryRecord après le chargement d'ActiveRecord
-        ##============================================================##
-        require "immosquare-extensions/models/history_record"
       end
     end
+
+
 
 
   end

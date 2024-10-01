@@ -7,7 +7,6 @@ require_relative "immosquare-extensions/shared_methods"
 ## Extensions
 ##============================================================##
 require_relative "immosquare-extensions/application_record"
-require_relative "immosquare-extensions/application_record_history"
 require_relative "immosquare-extensions/array"
 require_relative "immosquare-extensions/file"
 require_relative "immosquare-extensions/hash"
@@ -21,9 +20,7 @@ require_relative "immosquare-extensions/helpers/preview_mailer_helper"
 ##============================================================##
 ## Rails
 ##============================================================##
-require_relative "immosquare-extensions/railtie"                                                         if defined?(Rails)
-require_relative "generators/immosquare-extensions/application_record_history/install/install_generator" if defined?(Rails)
-
+require_relative "immosquare-extensions/railtie" if defined?(Rails)
 
 
 module ImmosquareExtensions

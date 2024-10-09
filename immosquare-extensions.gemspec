@@ -9,7 +9,7 @@ Gem::Specification.new do |spec|
 
   spec.authors       = ["immosquare"]
   spec.email         = ["jules@immosquare.com"]
-  spec.homepage      = "https://github.com/IMMOSQUARE/immosquare-extensions"
+  spec.homepage      = "https://github.com/immosquare/immosquare-extensions"
 
   spec.summary       = "Utility extensions for Ruby core classes"
   spec.description   = "The immosquare-extensions gem provides a set of utility extensions for various Ruby core classes such as String, Hash, and Array. These extensions aim to enhance the standard functionality, offering more convenience and efficiency for Ruby developers."

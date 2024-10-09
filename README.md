@@ -175,7 +175,7 @@ puts hash_example.to_beautiful_json(align: false)
 
 ## Contributing
 
-Bug reports and pull requests are welcome on GitHub at [https://github.com/IMMOSQUARE/immosquare-extensions](https://github.com/IMMOSQUARE/immosquare-extensions). This project is intended to be a safe, welcoming space for collaboration, and contributors are expected to adhere to the [Contributor Covenant code of conduct](https://www.contributor-covenant.org/version/2/0/code_of_conduct/).
+Bug reports and pull requests are welcome on GitHub at [https://github.com/immosquare/immosquare-extensions](https://github.com/immosquare/immosquare-extensions). This project is intended to be a safe, welcoming space for collaboration, and contributors are expected to adhere to the [Contributor Covenant code of conduct](https://www.contributor-covenant.org/version/2/0/code_of_conduct/).
 
 ## License
 

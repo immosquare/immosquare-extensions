@@ -1,5 +1,9 @@
 ## [Unreleased]
 
+## [0.1.26] - 2024-10-09
+
+Move Helpers to immosquare-railie gems
+
 ## [0.1.25] - 2024-08-22
 
 add new methods for application_record

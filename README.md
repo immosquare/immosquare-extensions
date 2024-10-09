@@ -1,4 +1,4 @@
-# IMMO SQUARE Extensions
+# immosquare Extensions
 
 Enhance your Ruby experience with utility methods for standard classes like `Application Record`, `Array`, `File`, `Hash`, `String`, ...
 

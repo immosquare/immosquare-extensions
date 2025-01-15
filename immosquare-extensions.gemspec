@@ -18,6 +18,6 @@ Gem::Specification.new do |spec|
   spec.files         = Dir["lib/**/*"]
   spec.require_paths = ["lib"]
 
-  spec.required_ruby_version = Gem::Requirement.new(">= 3.1.6")
+  spec.required_ruby_version = Gem::Requirement.new(">= 3.2.6")
   spec.add_dependency("unicode_utils",  "~> 1.4.0")
 end

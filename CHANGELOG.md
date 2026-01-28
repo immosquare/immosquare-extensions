@@ -1,3 +1,6 @@
+## [0.1.27] - 2026-01-28
+- Remove the override on the upcase method which is no longer useful
+
 ## [0.1.26] - 2024-10-09
 - Move Helpers to immosquare-railie gems
 

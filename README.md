@@ -15,22 +15,8 @@ Utility extensions for Ruby core classes (`String`, `Hash`, `Array`, `File`) and
 
 ## Installation
 
-Add to your Gemfile:
-
 ```ruby
 gem "immosquare-extensions"
-```
-
-Then run:
-
-```bash
-bundle install
-```
-
-Or install directly:
-
-```bash
-gem install immosquare-extensions
 ```
 
 ## String Extensions

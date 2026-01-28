@@ -19,5 +19,4 @@ Gem::Specification.new do |spec|
   spec.require_paths = ["lib"]
 
   spec.required_ruby_version = Gem::Requirement.new(">= 3.2.6")
-  spec.add_dependency("unicode_utils",  "~> 1.4.0")
 end

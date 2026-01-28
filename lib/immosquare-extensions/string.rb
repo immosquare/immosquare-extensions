@@ -42,15 +42,4 @@ class String
     humanize.gsub(/\b('?[a-z])/) { ::Regexp.last_match(1).capitalize }
   end
 
-  ##============================================================##
-  ## Overriding the standard upcase method to provide a more
-  ## comprehensive version that correctly handles Unicode characters.
-  ##
-  ## Example:
-  ## "José".upcase => "JOSÉ"
-  ##============================================================##
-  def upcase
-    UnicodeUtils.upcase(self)
-  end
-
 end

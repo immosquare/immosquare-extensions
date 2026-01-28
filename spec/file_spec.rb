@@ -1,3 +1,4 @@
+require "fileutils"
 require "immosquare-extensions"
 require "spec_helper"
 
@@ -39,6 +40,11 @@ RSpec.describe(File) do
     it "removes extra newline characters at the end of the file" do
       File.write(temp_file_path, "Line 1\nLine 2\nLine 3\n\n\n")
       expect { File.normalize_last_line(temp_file_path) }.to(change { File.read(temp_file_path) }.to("Line 1\nLine 2\nLine 3\n"))
+    end
+
+    it "returns 0 for an empty file" do
+      File.write(temp_file_path, "")
+      expect(File.normalize_last_line(temp_file_path)).to(eq(0))
     end
   end
 end

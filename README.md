@@ -1,135 +1,171 @@
-# immosquare Extensions
+# immosquare-extensions
 
-Enhance your Ruby experience with utility methods for standard classes like `Application Record`, `Array`, `File`, `Hash`, `String`, ...
+Utility extensions for Ruby core classes (`String`, `Hash`, `Array`, `File`) and Rails `ApplicationRecord`.
+
+## Table of Contents
+
+- [Installation](#installation)
+- [String Extensions](#string-extensions)
+- [Hash Extensions](#hash-extensions)
+- [Array Extensions](#array-extensions)
+- [File Extensions](#file-extensions)
+- [ApplicationRecord Extensions](#applicationrecord-extensions-rails)
+- [Contributing](#contributing)
+- [License](#license)
 
 ## Installation
 
-Add this line to your application's Gemfile:
+Add to your Gemfile:
 
 ```ruby
-gem 'immosquare-extensions'
+gem "immosquare-extensions"
 ```
 
-Then execute:
+Then run:
 
 ```bash
-$ bundle install
+bundle install
 ```
 
-Or install it yourself:
+Or install directly:
 
 ```bash
-$ gem install immosquare-extensions
+gem install immosquare-extensions
 ```
 
-## 1- Application Record Extensions (for Rails App)
+## String Extensions
 
-`.dig` (This method allows you to access nested attributes of an ActiveRecord model without having to manually check if each level is nil. It will return the value of the last key if all keys are present, or nil if any key is missing.)
+### to_boolean
+
+Converts `"true"` and `"false"` strings to boolean values. Returns `nil` (or a default value) for other strings.
 
 ```ruby
-user = User.first
-user.dig(:profile, :card_type, :slug)         # => "some-slug"
-user.dig(:profile, :non_existent_key, :slug)  # => nil
+"true".to_boolean   # => true
+"false".to_boolean  # => false
+"TRUE".to_boolean   # => true (case-insensitive)
+"other".to_boolean  # => nil
+
+# With default value
+"other".to_boolean(true)      # => true
+"other".to_boolean("default") # => "default"
 ```
 
+### titleize_custom
 
-## 2- Array Extensions
+Titleizes strings while preserving hyphens. Useful for city names and hyphenated words.
 
-`.mean` (Compute the average of numerical arrays.)
+**Note:** Requires ActiveSupport (available in Rails applications).
 
 ```ruby
-[1, 2, 3, 4, 5].mean   # => 3.0
+"SANT-ANDREA-D'ORCINO".titleize_custom  # => "Sant-Andrea-D'orcino"
+"jean-pierre".titleize_custom           # => "Jean-Pierre"
+"hello world".titleize_custom           # => "Hello World"
 ```
 
-## 3- File Extensions
+## Hash Extensions
 
-`.normalize_last_line` (Ensures that a file ends with a single newline character, facilitating cleaner multi-line blocks.)
+### without
+
+Removes multiple keys from a hash in a single operation.
 
 ```ruby
-total_lines = File.normalize_last_line('path/to/your/file.csv')
-puts "Total lines in the normalized file: #{total_lines}"
+{a: 1, b: 2, c: 3}.without(:a, :b)  # => {c: 3}
+{a: 1, b: 2}.without(:x)            # => {a: 1, b: 2} (non-existent keys ignored)
 ```
 
-## 4- Hash Extensions
+### depth
 
-`.without` (Remove multiple keys in one command.)
+Returns the nesting depth of a hash.
 
 ```ruby
-{a: 1, b: 2, c: 3}.without(:a, :b)  # => {:c=>3}
+{a: 1}.depth              # => 1
+{a: {b: 1}}.depth         # => 2
+{a: {b: {c: 1}}}.depth    # => 3
+{}.depth                  # => 0
 ```
 
+### sort_by_key
 
-`.depth` (Determine the depth of a nested hash.)
+Sorts a hash by its keys. Optionally sorts nested hashes recursively. Sorting is case-insensitive.
 
 ```ruby
-{a: {b: {c: 1}}}.depth  # => 3
+{b: 1, a: 2}.sort_by_key
+# => {a: 2, b: 1}
+
+{b: 1, a: {d: 4, c: 3}}.sort_by_key
+# => {a: {c: 3, d: 4}, b: 1}
+
+# Without recursion
+{b: 1, a: {d: 4, c: 3}}.sort_by_key(recursive: false)
+# => {a: {d: 4, c: 3}, b: 1}
+
+# With custom sorting block
+{b: 1, a: 2, c: 3}.sort_by_key { |x, y| y <=> x }
+# => {c: 3, b: 1, a: 2}
 ```
 
-`.sort_by_key` (Sort a hash by its keys, and optionally sort nested hashes recursively.)
+### flatten_hash
+
+Flattens a nested hash into a single-level hash with dot notation keys.
 
 ```ruby
-{b: 1, a: {d: 4, c: 3}}.sort_by_key  # => {:a=>{:c=>3, :d=>4}, :b=>1}
-{b: 1, a: {d: 4, c: 3}}.sort_by_key(:recursive => false)  # => {:a=>{:d=>4, :c=>3}, :b=>1}
+{a: {b: {c: 1}}}.flatten_hash
+# => {:"a.b.c" => 1}
+
+{a: 1, b: {c: 2, d: 3}}.flatten_hash
+# => {a: 1, :"b.c" => 2, :"b.d" => 3}
 ```
 
-`.flatten_hash` (Flatten nested hashes into a single-level hash with dot notation.)
+### to_beautiful_json (Hash)
+
+Renders the hash as a formatted JSON string with aligned colons and customizable indentation.
+
+**Options:**
+
+| Option        | Default   | Description                            |
+| ------------- | --------- | -------------------------------------- |
+| `align`       | `true`    | Aligns colons in key-value pairs       |
+| `indent_size` | `2`       | Number of spaces per indentation level |
 
 ```ruby
-{a: {b: {c: 1}}}.flatten_hash  # => {:a.b.c=>1}
-```
-
-`.to_beautiful_json` (Render the hash into a beautifully formatted JSON string, with options for alignment and indentation.)
-
-**Options**:
-
-- `:align` (default is `true`): Aligns the colons in key-value pairs for better readability.
-
-- `:indent_size` (default is `2`): Specifies the number of spaces for each indentation level.
-
-**Example**:
-
-```ruby
-hash_example = {
+hash = {
   name: "John",
   age: 30,
   address: {
     street: "123 Apple St",
-    city: "FruitVille",
-    postal_code: "12345"
+    city: "FruitVille"
   },
-  is_student: false,
-  courses: ["Math", "Science"]
+  active: true,
+  scores: [85, 90, 78]
 }
 
-puts hash_example.to_beautiful_json
+puts hash.to_beautiful_json
 ```
 
-**Output**:
+**Output (aligned):**
 
 ```json
 {
-  "name":       "John",
-  "age":        30,
-  "address":    {
-    "street":      "123 Apple St",
-    "city":        "FruitVille",
-    "postal_code": "12345"
+  "name":    "John",
+  "age":     30,
+  "address": {
+    "street": "123 Apple St",
+    "city":   "FruitVille"
   },
-  "is_student": false,
-  "courses":    [
-    "Math",
-    "Science"
+  "active":  true,
+  "scores":  [
+    85,
+    90,
+    78
   ]
 }
 ```
 
-**Disabling Alignment**:
+**Without alignment:**
 
 ```ruby
-puts hash_example.to_beautiful_json(align: false)
+puts hash.to_beautiful_json(align: false)
 ```
-
-**Output**:
 
 ```json
 {
@@ -137,45 +173,98 @@ puts hash_example.to_beautiful_json(align: false)
   "age": 30,
   "address": {
     "street": "123 Apple St",
-    "city": "FruitVille",
-    "postal_code": "12345"
+    "city": "FruitVille"
   },
-  "is_student": false,
-  "courses": [
-    "Math",
-    "Science"
+  "active": true,
+  "scores": [
+    85,
+    90,
+    78
   ]
 }
 ```
 
+## Array Extensions
 
-## 5 - String Extensions
+### mean
 
-`.to_boolean` (Convert strings like "true" and "false" to their boolean counterparts.)
+Calculates the arithmetic mean (average) of numerical arrays.
 
 ```ruby
-"true".to_boolean             # => true
-"true".to_boolean("hello")    # => true
-"false".to_boolean            # => false
-"string".to_boolean           # => nil
-"string".to_boolean("hello")  # => "hello"
+[1, 2, 3, 4, 5].mean  # => 3.0
+[2, 4, 6].mean        # => 4.0
+[10].mean             # => 10.0
+[].mean               # => NaN (division by zero)
 ```
 
-`.titleize_custom` (Titleize strings while preserving hyphens, ideal for city names.)
+### to_beautiful_json (Array)
+
+Renders the array as a formatted JSON string, with the same options as `Hash#to_beautiful_json`.
 
 ```ruby
-"SANT-ANDREA-D'ORCINO".titleize_custom  # => "Sant-Andrea-D'orcino"
+data = [
+  {name: "Alice", age: 25},
+  {name: "Bob", age: 30}
+]
+
+puts data.to_beautiful_json
 ```
 
-`.upcase` (Upcase strings with proper Unicode handling.)
+**Output:**
+
+```json
+[
+  {
+    "name": "Alice",
+    "age":  25
+  },
+  {
+    "name": "Bob",
+    "age":  30
+  }
+]
+```
+
+## File Extensions
+
+### normalize_last_line
+
+Ensures a file ends with exactly one newline character. Removes trailing empty lines and adds a newline if missing. Returns the total number of lines.
 
 ```ruby
-"ä".upcase  # => "Ä"
+# File content: "line1\nline2\nline3" (no trailing newline)
+File.normalize_last_line("path/to/file.txt")
+# File content becomes: "line1\nline2\nline3\n"
+# => 3
+
+# File content: "line1\nline2\n\n\n" (multiple trailing newlines)
+File.normalize_last_line("path/to/file.txt")
+# File content becomes: "line1\nline2\n"
+# => 2
+```
+
+## ApplicationRecord Extensions (Rails)
+
+These extensions are automatically included in `ActiveRecord::Base` when using Rails.
+
+### dig
+
+Accesses nested attributes on ActiveRecord models without manual nil checks. Returns `nil` if any intermediate value is missing.
+
+```ruby
+user = User.first
+
+# Instead of:
+user.profile&.card_type&.slug
+
+# You can write:
+user.dig(:profile, :card_type, :slug)  # => "premium"
+user.dig(:profile, :missing, :slug)    # => nil
 ```
 
 ## Contributing
 
-Bug reports and pull requests are welcome on GitHub at [https://github.com/immosquare/immosquare-extensions](https://github.com/immosquare/immosquare-extensions). This project is intended to be a safe, welcoming space for collaboration, and contributors are expected to adhere to the [Contributor Covenant code of conduct](https://www.contributor-covenant.org/version/2/0/code_of_conduct/).
+Bug reports and pull requests are welcome on GitHub at [https://github.com/immosquare/immosquare-extensions](https://github.com/immosquare/immosquare-extensions).
 
 ## License
 

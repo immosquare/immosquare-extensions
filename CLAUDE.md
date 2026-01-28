@@ -35,19 +35,19 @@ The gem is organized as class extensions that are automatically loaded:
 ### Extension Files
 
 Each file in `lib/immosquare-extensions/` extends a Ruby core class:
-- `string.rb` - String extensions (`to_boolean`, `titleize_custom`, Unicode `upcase`)
+- `string.rb` - String extensions (`to_boolean`, `titleize_custom` - requires ActiveSupport)
 - `hash.rb` - Hash extensions (`without`, `depth`, `sort_by_key`, `flatten_hash`, `to_beautiful_json`)
-- `array.rb` - Array extensions (`mean`)
+- `array.rb` - Array extensions (`mean`, `to_beautiful_json`)
 - `file.rb` - File extensions (`normalize_last_line`)
 - `application_record.rb` - ActiveRecord `dig` method for nested attribute access
 
 ### Key Design Patterns
 
-- Extensions use `prepend` to add methods to core classes
+- Extensions add methods directly to Ruby core classes
 - SharedMethods module provides `dump_beautify_json` helper for JSON formatting with alignment
 - Rails integration via Railtie auto-loads ApplicationRecord extensions
 
 ## Dependencies
 
 - Ruby >= 3.2.6
-- `unicode_utils` ~> 1.4.0 (for Unicode-aware string operations)
+- ActiveSupport (optional, required for `titleize_custom` method)

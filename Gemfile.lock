@@ -1,7 +1,7 @@
 PATH
   remote: .
   specs:
-    immosquare-extensions (0.1.27)
+    immosquare-extensions (0.1.28)
 
 GEM
   remote: https://rubygems.org/

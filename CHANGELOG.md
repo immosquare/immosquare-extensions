@@ -1,3 +1,7 @@
+## [0.1.28] - 2026-01-28
+- Remove forgotten require
+- Improve tests and documentation
+
 ## [0.1.27] - 2026-01-28
 - Remove the override on the upcase method which is no longer useful
 

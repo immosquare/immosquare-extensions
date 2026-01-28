@@ -3,6 +3,7 @@ source "https://rubygems.org"
 gemspec
 
 group :development do
+  gem "activesupport"
   gem "bundler"
   gem "immosquare-cleaner"
   gem "rake"

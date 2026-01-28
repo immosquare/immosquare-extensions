@@ -1,5 +1,3 @@
-require "unicode_utils/upcase"
-
 ##============================================================##
 ## This extension adds utility methods to the String class.
 ##============================================================##

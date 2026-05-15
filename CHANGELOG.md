@@ -1,3 +1,6 @@
+## [0.1.29] - 2026-05-15
+- Allow cleaning a file whose path contains a space
+
 ## [0.1.28] - 2026-01-28
 - Remove forgotten require
 - Improve tests and documentation

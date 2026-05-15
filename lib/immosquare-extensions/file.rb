@@ -1,3 +1,5 @@
+require "shellwords"
+
 class File
 
   ##===========================================================================##
@@ -33,7 +35,7 @@ class File
     ## Read the content of the file with the detected encoding,
     ## falling back to UTF-8 if the detected encoding is empty or invalid.
     ##============================================================##
-    detected_encoding  = `uchardet #{file_path}`.strip.to_s.upcase
+    detected_encoding  = `uchardet #{Shellwords.escape(file_path)}`.strip.to_s.upcase
     encoding_whitelist = [
       "UTF-8",            # Encodage universel pour texte avec ou sans accents
       "Windows-1252",     # Utilisé couramment pour les langues occidentales

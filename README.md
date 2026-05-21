@@ -15,9 +15,19 @@ Utility extensions for Ruby core classes (`String`, `Hash`, `Array`, `File`) and
 
 ## Installation
 
+Add this line to your Gemfile:
+
 ```ruby
 gem "immosquare-extensions"
 ```
+
+Then run:
+
+```bash
+bundle install
+```
+
+Requires Ruby `>= 3.2.6`. `File.normalize_last_line` additionally requires the `uchardet` CLI binary (`brew install uchardet`) for encoding detection.
 
 ## String Extensions
 
@@ -108,10 +118,10 @@ Renders the hash as a formatted JSON string with aligned colons and customizable
 
 **Options:**
 
-| Option        | Default   | Description                            |
-| ------------- | --------- | -------------------------------------- |
-| `align`       | `true`    | Aligns colons in key-value pairs       |
-| `indent_size` | `2`       | Number of spaces per indentation level |
+| Option        | Default   | Description                                                                                  |
+| ------------- | --------- | -------------------------------------------------------------------------------------------- |
+| `align`       | `true`    | Aligns colons in key-value pairs                                                             |
+| `indent_size` | `2`       | Number of spaces per indentation level. Values `<= 0` or `> 10` fall back to the default `2` |
 
 ```ruby
 hash = {
@@ -215,7 +225,9 @@ puts data.to_beautiful_json
 
 ### normalize_last_line
 
-Ensures a file ends with exactly one newline character. Removes trailing empty lines and adds a newline if missing. Returns the total number of lines.
+Ensures a file ends with exactly one newline character. Removes trailing empty lines and adds a newline if missing. Returns the total number of lines (or `0` if the file is empty).
+
+The file encoding is auto-detected via the `uchardet` CLI binary and preserved on write. Detected encodings outside a known whitelist (UTF-8/16/32, Windows-125x, ISO-8859-x, KOI8-R, Big5, GB2312, Shift_JIS, EUC-JP/KR, ISO-2022-JP/KR/CN) fall back to UTF-8. File paths containing spaces are supported.
 
 ```ruby
 # File content: "line1\nline2\nline3" (no trailing newline)

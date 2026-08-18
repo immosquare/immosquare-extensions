@@ -1,3 +1,10 @@
+---
+locale: en
+tags:
+  - app:immosquare-extensions
+  - audience:technique
+---
+
 # immosquare-extensions
 
 Utility extensions for Ruby core classes (`String`, `Hash`, `Array`, `File`) and Rails `ApplicationRecord`.

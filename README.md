@@ -7,21 +7,18 @@ tags:
 
 # immosquare-extensions
 
-Utility extensions for Ruby core classes (`String`, `Hash`, `Array`, `File`) and Rails `ApplicationRecord`.
+`immosquare-extensions` is a Ruby gem that adds utility methods to the core classes `String`, `Hash`, `Array` and `File`, plus a nested-attribute accessor on Rails `ApplicationRecord`. This README is for Ruby and Rails developers using the gem: it covers installation, every method added class by class, and how to run the test suite and the CI entry point. It assumes Ruby `>= 3.2.6`; `String#titleize_custom` additionally needs ActiveSupport and `File.normalize_last_line` the `uchardet` CLI binary.
 
-## Table of Contents
+- [Installing immosquare-extensions](#installing-immosquare-extensions)
+- [String extensions](#string-extensions-to_boolean-and-titleize_custom)
+- [Hash extensions](#hash-extensions-without-depth-sort_by_key-flatten_hash-and-to_beautiful_json)
+- [Array extensions](#array-extensions-mean-and-to_beautiful_json)
+- [File extensions](#file-extensions-normalize_last_line)
+- [ApplicationRecord extensions](#applicationrecord-extensions-in-rails-dig)
+- [Developing immosquare-extensions](#developing-immosquare-extensions-test-suite-coverage-and-ci)
+- [Contributing and license](#contributing-to-immosquare-extensions-and-license)
 
-- [Installation](#installation)
-- [String Extensions](#string-extensions)
-- [Hash Extensions](#hash-extensions)
-- [Array Extensions](#array-extensions)
-- [File Extensions](#file-extensions)
-- [ApplicationRecord Extensions](#applicationrecord-extensions-rails)
-- [Development](#development)
-- [Contributing](#contributing)
-- [License](#license)
-
-## Installation
+## Installing immosquare-extensions
 
 Add this line to your Gemfile:
 
@@ -37,11 +34,11 @@ bundle install
 
 Requires Ruby `>= 3.2.6`. `File.normalize_last_line` additionally requires the `uchardet` CLI binary (`brew install uchardet`) for encoding detection.
 
-## String Extensions
+## String extensions: `to_boolean` and `titleize_custom`
 
-### to_boolean
+`immosquare-extensions` adds two methods to `String`.
 
-Converts `"true"` and `"false"` strings to boolean values. Returns `nil` (or a default value) for other strings.
+**`String#to_boolean`** converts `"true"` and `"false"` strings to boolean values. Returns `nil` (or a default value) for other strings.
 
 ```ruby
 "true".to_boolean   # => true
@@ -54,11 +51,7 @@ Converts `"true"` and `"false"` strings to boolean values. Returns `nil` (or a d
 "other".to_boolean("default") # => "default"
 ```
 
-### titleize_custom
-
-Titleizes strings while preserving hyphens. Useful for city names and hyphenated words.
-
-**Note:** Requires ActiveSupport (available in Rails applications).
+**`String#titleize_custom`** titleizes strings while preserving hyphens. Useful for city names and hyphenated words. It requires ActiveSupport (available in Rails applications).
 
 ```ruby
 "SANT-ANDREA-D'ORCINO".titleize_custom  # => "Sant-Andrea-D'orcino"
@@ -66,20 +59,18 @@ Titleizes strings while preserving hyphens. Useful for city names and hyphenated
 "hello world".titleize_custom           # => "Hello World"
 ```
 
-## Hash Extensions
+## Hash extensions: `without`, `depth`, `sort_by_key`, `flatten_hash` and `to_beautiful_json`
 
-### without
+`immosquare-extensions` adds five methods to `Hash`.
 
-Removes multiple keys from a hash in a single operation.
+**`Hash#without`** removes multiple keys from a hash in a single operation.
 
 ```ruby
 {a: 1, b: 2, c: 3}.without(:a, :b)  # => {c: 3}
 {a: 1, b: 2}.without(:x)            # => {a: 1, b: 2} (non-existent keys ignored)
 ```
 
-### depth
-
-Returns the nesting depth of a hash.
+**`Hash#depth`** returns the nesting depth of a hash.
 
 ```ruby
 {a: 1}.depth              # => 1
@@ -88,9 +79,7 @@ Returns the nesting depth of a hash.
 {}.depth                  # => 0
 ```
 
-### sort_by_key
-
-Sorts a hash by its keys. Optionally sorts nested hashes recursively. Sorting is case-insensitive.
+**`Hash#sort_by_key`** sorts a hash by its keys. Optionally sorts nested hashes recursively. Sorting is case-insensitive.
 
 ```ruby
 {b: 1, a: 2}.sort_by_key
@@ -108,9 +97,7 @@ Sorts a hash by its keys. Optionally sorts nested hashes recursively. Sorting is
 # => {c: 3, b: 1, a: 2}
 ```
 
-### flatten_hash
-
-Flattens a nested hash into a single-level hash with dot notation keys.
+**`Hash#flatten_hash`** flattens a nested hash into a single-level hash with dot notation keys.
 
 ```ruby
 {a: {b: {c: 1}}}.flatten_hash
@@ -120,11 +107,7 @@ Flattens a nested hash into a single-level hash with dot notation keys.
 # => {a: 1, :"b.c" => 2, :"b.d" => 3}
 ```
 
-### to_beautiful_json (Hash)
-
-Renders the hash as a formatted JSON string with aligned colons and customizable indentation.
-
-**Options:**
+**`Hash#to_beautiful_json`** renders the hash as a formatted JSON string with aligned colons and customizable indentation. Its two options, with their default values and what each one controls:
 
 | Option        | Default   | Description                                                                                  |
 | ------------- | --------- | -------------------------------------------------------------------------------------------- |
@@ -188,11 +171,11 @@ puts hash.to_beautiful_json(align: false)
 }
 ```
 
-## Array Extensions
+## Array extensions: `mean` and `to_beautiful_json`
 
-### mean
+`immosquare-extensions` adds two methods to `Array`.
 
-Calculates the arithmetic mean (average) of numerical arrays.
+**`Array#mean`** calculates the arithmetic mean (average) of numerical arrays.
 
 ```ruby
 [1, 2, 3, 4, 5].mean  # => 3.0
@@ -201,9 +184,7 @@ Calculates the arithmetic mean (average) of numerical arrays.
 [].mean               # => NaN (division by zero)
 ```
 
-### to_beautiful_json (Array)
-
-Renders the array as a formatted JSON string, with the same options as `Hash#to_beautiful_json`.
+**`Array#to_beautiful_json`** renders the array as a formatted JSON string, with the same options as `Hash#to_beautiful_json`.
 
 ```ruby
 data = [
@@ -229,11 +210,9 @@ puts data.to_beautiful_json
 ]
 ```
 
-## File Extensions
+## File extensions: `normalize_last_line`
 
-### normalize_last_line
-
-Ensures a file ends with exactly one newline character. Removes trailing empty lines and adds a newline if missing. Returns the total number of lines (or `0` if the file is empty).
+`File.normalize_last_line` ensures a file ends with exactly one newline character. Removes trailing empty lines and adds a newline if missing. Returns the total number of lines (or `0` if the file is empty).
 
 The file encoding is auto-detected via the `uchardet` CLI binary and preserved on write. Detected encodings outside a known whitelist (UTF-8/16/32, Windows-125x, ISO-8859-x, KOI8-R, Big5, GB2312, Shift_JIS, EUC-JP/KR, ISO-2022-JP/KR/CN) fall back to UTF-8. File paths containing spaces are supported.
 
@@ -249,13 +228,11 @@ File.normalize_last_line("path/to/file.txt")
 # => 2
 ```
 
-## ApplicationRecord Extensions (Rails)
+## ApplicationRecord extensions in Rails: `dig`
 
-These extensions are automatically included in `ActiveRecord::Base` when using Rails.
+The `ApplicationRecord` extensions of `immosquare-extensions` are automatically included in `ActiveRecord::Base` when using Rails.
 
-### dig
-
-Accesses nested attributes on ActiveRecord models without manual nil checks. Returns `nil` if any intermediate value is missing.
+**`dig`** accesses nested attributes on ActiveRecord models without manual nil checks. Returns `nil` if any intermediate value is missing.
 
 ```ruby
 user = User.first
@@ -268,9 +245,9 @@ user.dig(:profile, :card_type, :slug)  # => "premium"
 user.dig(:profile, :missing, :slug)    # => nil
 ```
 
-## Development
+## Developing immosquare-extensions: test suite, coverage and CI
 
-Install the dependencies and run the suite:
+To work on `immosquare-extensions` itself, install the dependencies and run the suite:
 
 ```bash
 bundle install
@@ -285,7 +262,7 @@ COVERAGE=true bundle exec rspec
 
 Coverage is written to `coverage/` in two formats — an HTML report and `coverage/lcov.info`, which is the file the CI reads.
 
-`bin/ci` is the entry point used by the Jenkins pipeline, and it works the same on a laptop:
+`bin/ci` is the entry point used by the Jenkins pipeline, and it works the same on a laptop. Each row below is one of its subcommands and what it runs:
 
 | Command         | What it does                                                       |
 | --------------- | ------------------------------------------------------------------ |
@@ -296,10 +273,8 @@ Everything specific to the build agent — RVM provisioning of the Ruby pinned i
 
 Dependencies the specs need go in the `test` group of the Gemfile, never in `development`: the CI exports `BUNDLE_WITHOUT="development"` and a gem placed there is missing at test time.
 
-## Contributing
+## Contributing to immosquare-extensions and license
 
 Bug reports and pull requests are welcome on GitHub at [https://github.com/immosquare/immosquare-extensions](https://github.com/immosquare/immosquare-extensions).
-
-## License
 
 The gem is available as open-source under the terms of the [MIT License](https://opensource.org/licenses/MIT).

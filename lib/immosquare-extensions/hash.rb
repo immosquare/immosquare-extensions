@@ -89,7 +89,7 @@ class Hash
   def to_beautiful_json(**options)
     options               = {}.merge(options)
     options[:align]       = true if ![true, false].include?(options[:align])
-    options[:indent_size] = 2    if options[:indent_size].to_i == 0 || options[:indent_size].to_i > 10
+    options[:indent_size] = 2    if options[:indent_size].to_i <= 0 || options[:indent_size].to_i > 10
 
     dump_beautify_json(self, options[:align], options[:indent_size])
   end

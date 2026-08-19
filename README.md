@@ -17,6 +17,7 @@ Utility extensions for Ruby core classes (`String`, `Hash`, `Array`, `File`) and
 - [Array Extensions](#array-extensions)
 - [File Extensions](#file-extensions)
 - [ApplicationRecord Extensions](#applicationrecord-extensions-rails)
+- [Development](#development)
 - [Contributing](#contributing)
 - [License](#license)
 
@@ -266,6 +267,34 @@ user.profile&.card_type&.slug
 user.dig(:profile, :card_type, :slug)  # => "premium"
 user.dig(:profile, :missing, :slug)    # => nil
 ```
+
+## Development
+
+Install the dependencies and run the suite:
+
+```bash
+bundle install
+bundle exec rspec
+```
+
+Set `COVERAGE=true` to measure coverage. Without it, `spec/coverage_helper.rb` is a no-op: the run stays fast and leaves no `coverage/` directory behind.
+
+```bash
+COVERAGE=true bundle exec rspec
+```
+
+Coverage is written to `coverage/` in two formats — an HTML report and `coverage/lcov.info`, which is the file the CI reads.
+
+`bin/ci` is the entry point used by the Jenkins pipeline, and it works the same on a laptop:
+
+| Command         | What it does                                                       |
+| --------------- | ------------------------------------------------------------------ |
+| `bin/ci init`   | Installs the bundle without the `development` group                |
+| `bin/ci test`   | Runs `bundle exec rspec`                                           |
+
+Everything specific to the build agent — RVM provisioning of the Ruby pinned in `.ruby-version`, bundler pinning — is skipped when `JENKINS_WORKSPACE` is unset.
+
+Dependencies the specs need go in the `test` group of the Gemfile, never in `development`: the CI exports `BUNDLE_WITHOUT="development"` and a gem placed there is missing at test time.
 
 ## Contributing
 

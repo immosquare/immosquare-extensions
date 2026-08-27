@@ -7,10 +7,10 @@ tags:
 
 # immosquare-extensions
 
-`immosquare-extensions` is a Ruby gem that adds utility methods to the core classes `String`, `Hash`, `Array` and `File`, plus a nested-attribute accessor on Rails `ApplicationRecord`. This README is for Ruby and Rails developers using the gem: it covers installation, every method added class by class, and how to run the test suite and the CI entry point. It assumes Ruby `>= 3.2.6`; `String#titleize_custom` additionally needs ActiveSupport and `File.normalize_last_line` the `uchardet` CLI binary.
+`immosquare-extensions` is a Ruby gem that adds utility methods to the core classes `String`, `Hash`, `Array` and `File`, plus a nested-attribute accessor on Rails `ApplicationRecord`. This README is for Ruby and Rails developers using the gem: it covers installation, every method added class by class, and how to run the test suite and the CI entry point. It assumes Ruby `>= 3.2.6`; `String#titleize_place` and `String#titleize_name` additionally need ActiveSupport and `File.normalize_last_line` the `uchardet` CLI binary.
 
 - [Installing immosquare-extensions](#installing-immosquare-extensions)
-- [String extensions](#string-extensions-to_boolean-and-titleize_custom)
+- [String extensions](#string-extensions-to_boolean-titleize_place-and-titleize_name)
 - [Hash extensions](#hash-extensions-without-depth-sort_by_key-flatten_hash-and-to_beautiful_json)
 - [Array extensions](#array-extensions-mean-and-to_beautiful_json)
 - [File extensions](#file-extensions-normalize_last_line)
@@ -34,9 +34,9 @@ bundle install
 
 Requires Ruby `>= 3.2.6`. `File.normalize_last_line` additionally requires the `uchardet` CLI binary (`brew install uchardet`) for encoding detection.
 
-## String extensions: `to_boolean` and `titleize_custom`
+## String extensions: `to_boolean`, `titleize_place` and `titleize_name`
 
-`immosquare-extensions` adds two methods to `String`.
+`immosquare-extensions` adds three methods to `String`.
 
 **`String#to_boolean`** converts `"true"` and `"false"` strings to boolean values. Returns `nil` (or a default value) for other strings.
 
@@ -51,13 +51,28 @@ Requires Ruby `>= 3.2.6`. `File.normalize_last_line` additionally requires the `
 "other".to_boolean("default") # => "default"
 ```
 
-**`String#titleize_custom`** titleizes strings while preserving hyphens. Useful for city names and hyphenated words. It requires ActiveSupport (available in Rails applications).
+**`String#titleize_place`** titleizes a place name under French typographic rules, which standard `titleize` gets wrong: hyphens are preserved, the capital goes on the letter *after* an apostrophe, and particles (`de`, `du`, `des`, `la`, `le`, `les`, `sur`, `en`, `ès`, `à`, `au`, `aux`, `et`, `sous`, `lès`) stay lowercase unless they open the name. An English possessive is left alone. It requires ActiveSupport (available in Rails applications).
 
 ```ruby
-"SANT-ANDREA-D'ORCINO".titleize_custom  # => "Sant-Andrea-D'orcino"
-"jean-pierre".titleize_custom           # => "Jean-Pierre"
-"hello world".titleize_custom           # => "Hello World"
+"SANT-ANDREA-D'ORCINO".titleize_place      # => "Sant-Andrea-d'Orcino"
+"saint-jean-sur-richelieu".titleize_place  # => "Saint-Jean-sur-Richelieu"
+"l'assomption".titleize_place              # => "L'Assomption"
+"MONTRÉAL".titleize_place                  # => "Montréal"
+"st john's".titleize_place                 # => "St John's"
+"hello world".titleize_place               # => "Hello World"
 ```
+
+**`String#titleize_name`** titleizes anything that is not a place — a person, an agency, a building, an enumeration label. Same apostrophe and accent handling as `titleize_place`, but no particle is lowercased.
+
+```ruby
+"o'brien".titleize_name          # => "O'Brien"
+"MAISON DE VILLE".titleize_name  # => "Maison De Ville"
+"émilie".titleize_name           # => "Émilie"
+```
+
+Both methods normalize through ActiveSupport's `humanize` first, which has three known consequences: internal capitals are flattened (`MacDonald` → `Macdonald`), a dotted abbreviation reads as a particle (`n.-d.-de-grâce` → `N.-d.-de-Grâce`) and roman numerals are recapitalized (`Louis XIV` → `Louis Xiv`).
+
+> `titleize_place` and `titleize_name` replace `titleize_custom`, removed in `0.2.0`. `titleize_custom` capitalized the letter *before* the apostrophe and lowered no particle, so `"SANT-ANDREA-D'ORCINO"` came out as `"Sant-Andrea-D'orcino"`.
 
 ## Hash extensions: `without`, `depth`, `sort_by_key`, `flatten_hash` and `to_beautiful_json`
 

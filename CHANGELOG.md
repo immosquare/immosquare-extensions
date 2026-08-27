@@ -1,3 +1,14 @@
+## [0.2.0] - 2026-08-26
+
+### Added
+- `String#titleize_place` and `String#titleize_name`: French-aware titleization that capitalizes the letter after an apostrophe, keeps English possessives lowercase and, for place names, lowercases particles (`de`, `sur`, `les`…) unless they open the name
+
+### Removed
+- `String#titleize_custom`, replaced by `titleize_place` / `titleize_name`
+
+### Fixed
+- `to_beautiful_json`: fall back to the default indent for negative sizes
+
 ## [0.1.29] - 2026-05-15
 - Allow cleaning a file whose path contains a space
 

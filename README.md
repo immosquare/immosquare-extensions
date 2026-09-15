@@ -277,14 +277,15 @@ COVERAGE=true bundle exec rspec
 
 Coverage is written to `coverage/` in two formats — an HTML report and `coverage/lcov.info`, which is the file the CI reads.
 
-`bin/ci` is the entry point used by the Jenkins pipeline, and it works the same on a laptop. Each row below is one of its subcommands and what it runs:
+`bin/ci` is the entry point used by the CI, and it works the same on a laptop. Each row below is one of its subcommands and what it runs:
 
 | Command         | What it does                                                       |
 | --------------- | ------------------------------------------------------------------ |
 | `bin/ci init`   | Installs the bundle without the `development` group                |
 | `bin/ci test`   | Runs `bundle exec rspec`                                           |
+| `bin/ci`        | Both, in that order (the default, `all`)                           |
 
-Everything specific to the build agent — RVM provisioning of the Ruby pinned in `.ruby-version`, bundler pinning — is skipped when `JENKINS_WORKSPACE` is unset.
+The script provisions nothing itself: the CI runner selects the Ruby pinned in `.ruby-version` and the gemset named by `.ruby-gemset` before calling it. It defaults `COVERAGE` to `true`, and the CI collects `coverage/lcov.info`.
 
 Dependencies the specs need go in the `test` group of the Gemfile, never in `development`: the CI exports `BUNDLE_WITHOUT="development"` and a gem placed there is missing at test time.
 

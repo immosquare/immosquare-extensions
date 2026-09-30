@@ -19,8 +19,6 @@ module ImmosquareExtensions
         "\"#{escaped_value}\""
       when NilClass
         "null"
-      when TrueClass, FalseClass
-        value.to_s
       else
         value.to_s
       end
@@ -42,7 +40,7 @@ module ImmosquareExtensions
       if hash.is_a?(Hash)
         return "{}" if hash.empty?
 
-        if hash.keys.count == 1 && indent > 0
+        if hash.size == 1 && indent > 0
           key, value = hash.first
           if !value.is_a?(Array)
             value_str = json_representation(value, align, indent_size, indent)

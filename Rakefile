@@ -7,13 +7,13 @@ namespace :immosquare_extensions do
     ##============================================================##
     task :depth do
       hash = {:a => 1, :b => {:c => 2, :d => {:e => 3}}}
-      puts hash.depth
+      puts(hash.depth)
     end
 
     task :sort_by_key do
       hash = {:b => 1, :a => {:d => 4, :c => 3}}
-      puts hash.sort_by_key
-      puts hash.sort_by_key(:recursive => false)
+      puts(hash.sort_by_key)
+      puts(hash.sort_by_key(:recursive => false))
     end
 
 
@@ -116,7 +116,7 @@ namespace :immosquare_extensions do
         :empty_hash     => {},
         :empty_array    => []
       }
-      puts hash1.to_beautiful_json(:align => true, :indent_size => 2)
+      puts(hash1.to_beautiful_json(:align => true, :indent_size => 2))
     end
   end
 end

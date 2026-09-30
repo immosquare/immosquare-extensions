@@ -67,7 +67,7 @@ class Hash
     each_with_object({}) do |(k, v), h|
       if v.is_a?(Hash)
         v.flatten_hash.map do |h_k, h_v|
-          h["#{k}.#{h_k}".to_sym] = h_v
+          h[:"#{k}.#{h_k}"] = h_v
         end
       else
         h[k] = v

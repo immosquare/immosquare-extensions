@@ -2,7 +2,7 @@ require "shellwords"
 
 class File
 
-  ##===========================================================================##
+  ##============================================================##
   ## This method ensures the file ends with a single newline, facilitating
   ## cleaner multi-line blocks. It operates by reading all lines of the file,
   ## removing any empty lines at the end, and then appending a newline.
@@ -14,7 +14,7 @@ class File
   ##
   ## Returns:
   ## The total number of lines in the normalized file.
-  ##===========================================================================##
+  ##============================================================##
   def self.normalize_last_line(file_path)
     ##============================================================##
     ## Get the file size
@@ -73,24 +73,24 @@ class File
     encoding_to_use   = detected_encoding.empty? || !encoding_whitelist.include?(detected_encoding) ? "UTF-8" : "#{detected_encoding}:UTF-8"
     content           = File.read(file_path, :encoding => encoding_to_use)
 
-    ##===========================================================================##
+    ##============================================================##
     ## Remove all trailing empty lines at the end of the file
-    ##===========================================================================##
+    ##============================================================##
     content.gsub!(/#{Regexp.escape(end_of_line)}+\z/, "")
 
-    ##===========================================================================##
+    ##============================================================##
     ## Append an EOL at the end to maintain the file structure
-    ##===========================================================================##
+    ##============================================================##
     content << end_of_line
 
-    ##===========================================================================##
+    ##============================================================##
     ## Write the modified lines back to the file
-    ##===========================================================================##
+    ##============================================================##
     File.write(file_path, content, :encoding => encoding_to_use)
 
-    ##===========================================================================##
+    ##============================================================##
     ## Return the total number of lines in the modified file
-    ##===========================================================================##
+    ##============================================================##
     content.lines.size
   end
 

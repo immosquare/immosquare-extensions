@@ -24,10 +24,10 @@ class Array
   ## A json file can be a hash or an array. This method will
   ## test.json
   ## [
-  ##  {"name": "Alice"},
-  ##  {"name": "Bob"},
+  ##   {"name": "Alice"},
+  ##   {"name": "Bob"},
   ##   123,
-  ##  "string"
+  ##   "string"
   ## ]
   ##============================================================##
   def to_beautiful_json(**options)

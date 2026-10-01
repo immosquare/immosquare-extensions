@@ -51,7 +51,7 @@ Requires Ruby `>= 3.2.6`. `File.normalize_last_line` additionally requires the `
 "other".to_boolean("default") # => "default"
 ```
 
-**`String#titleize_place`** titleizes a place name under French typographic rules, which standard `titleize` gets wrong: hyphens are preserved, the capital goes on the letter *after* an apostrophe, and particles (`de`, `du`, `des`, `la`, `le`, `les`, `sur`, `en`, `ès`, `à`, `au`, `aux`, `et`, `sous`, `lès`) stay lowercase unless they open the name. An English possessive is left alone. It requires ActiveSupport (available in Rails applications).
+**`String#titleize_place`** titleizes a place name under French typographic rules, which standard `titleize` gets wrong: hyphens are preserved, the capital goes on the letter *after* an apostrophe, and particles (`à`, `au`, `aux`, `d`, `de`, `des`, `du`, `en`, `ès`, `et`, `l`, `la`, `le`, `les`, `lès`, `sous`, `sur`) stay lowercase unless they open the name. `d` and `l` cover the elided forms `d'` and `l'`. An English possessive is left alone. It requires ActiveSupport (available in Rails applications).
 
 ```ruby
 "SANT-ANDREA-D'ORCINO".titleize_place      # => "Sant-Andrea-d'Orcino"
